@@ -110,7 +110,7 @@ export default function Ide({
     });
     // websocket
     websocketRef.current = new WebSocket(
-      `ws://${process.env.NEXT_PUBLIC_BACKEND_HOST}/run/${project.language}`,
+      `wss://${process.env.NEXT_PUBLIC_BACKEND_HOST}/run/${project.language}`,
     );
     let ws = websocketRef.current;
     const req = {
