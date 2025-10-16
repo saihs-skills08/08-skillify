@@ -1,5 +1,8 @@
+import { auth } from "@/auth";
 import Ide from "./ide";
 import { getProjectInfo } from "./ide-actions";
+import NotAuthed from "@/components/page/not-authed";
+import NotFound from "../not-found";
 
 export default async function IdePage({
   searchParams,
@@ -9,13 +12,24 @@ export default async function IdePage({
   const params = await searchParams;
   const projectId = params.project;
   const hasProjectId = !!projectId;
-  const initContent = await getProjectInfo(projectId);
+  let initContent = null;
+  try {
+    initContent = await getProjectInfo(projectId);
+  } catch (e) {
+    return <NotFound />;
+  }
+  const session = await auth();
+  const userId = session?.user?.id;
+  if (userId !== initContent.owner.$id) {
+    return <NotFound />;
+  }
+
   return (
     <>
       {hasProjectId ? (
         <Ide initContent={initContent} projectId={projectId} />
       ) : (
-        <div>404</div>
+        <NotFound />
       )}
     </>
   );

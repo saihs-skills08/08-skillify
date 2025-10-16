@@ -43,10 +43,17 @@ export default function ProjectList({
 
   useEffect(() => {
     client.subscribe(["documents"], (response) => {
-      getUserProjects().then((projects) => {
-        setProjects(projects);
-        setIsEmpty(projects.length === 0);
-      });
+      console.log("Project list update received:", response);
+      if (
+        response.channels.includes(
+          "databases.db.collections.projects.documents",
+        )
+      ) {
+        getUserProjects().then((projects) => {
+          setProjects(projects);
+          setIsEmpty(projects.length === 0);
+        });
+      }
     });
   }, []);
 

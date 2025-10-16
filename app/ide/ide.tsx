@@ -44,9 +44,15 @@ export default function Ide({
 
   useEffect(() => {
     client.subscribe(["documents"], (response) => {
-      getProjectInfo(projectId).then((project) => {
-        setProject(project);
-      });
+      if (
+        response.events.includes(
+          `databases.db.collections.projects.documents.${project.$id}.update`,
+        )
+      ) {
+        getProjectInfo(projectId).then((project) => {
+          setProject(project);
+        });
+      }
     });
   }, []);
 
