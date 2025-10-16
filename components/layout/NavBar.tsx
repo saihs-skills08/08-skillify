@@ -47,7 +47,10 @@ export default async function NavBar() {
           <DropdownMenu>
             <DropdownMenuTrigger>
               <Avatar className="w-10 h-10">
-                <AvatarImage src={session?.user?.image} alt="User Avatar" />
+                <AvatarImage
+                  src={session?.user?.image as string}
+                  alt="User Avatar"
+                />
                 <AvatarFallback>{session.user.name?.charAt(0)}</AvatarFallback>
               </Avatar>
             </DropdownMenuTrigger>
