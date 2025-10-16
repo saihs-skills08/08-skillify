@@ -20,7 +20,7 @@ export default async function NavBar() {
     { name: "GuideBook", href: "/book" },
   ];
   return (
-    <nav className="py-3 px-4 backdrop-blur-xl fixed w-full top-0">
+    <nav className="py-3 px-4 backdrop-blur-xl fixed w-full top-0 z-10">
       <div className="flex justify-between items-center max-w-7xl mx-auto">
         <div className="flex items-center gap-3">
           <Link href="/">

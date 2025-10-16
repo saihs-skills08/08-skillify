@@ -43,7 +43,6 @@ export default function ProjectList({
 
   useEffect(() => {
     client.subscribe(["documents"], (response) => {
-      console.log("Project list update received:", response);
       if (
         response.channels.includes(
           "databases.db.collections.projects.documents",

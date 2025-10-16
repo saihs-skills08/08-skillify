@@ -109,8 +109,13 @@ export default function Ide({
       fitAddon.fit();
     });
     // websocket
+    const protocol = process.env.NEXT_PUBLIC_BACKEND_HOST?.includes(
+      "08-skillify-worker",
+    )
+      ? "wss"
+      : "ws";
     websocketRef.current = new WebSocket(
-      `wss://${process.env.NEXT_PUBLIC_BACKEND_HOST}/run/${project.language}`,
+      `${protocol}://${process.env.NEXT_PUBLIC_BACKEND_HOST}/run/${project.language}`,
     );
     let ws = websocketRef.current;
     const req = {

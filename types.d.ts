@@ -20,3 +20,9 @@ interface Project {
   owner: string;
   language: string;
 }
+
+interface BookPage {
+  order: number;
+  title: string;
+  link: string;
+}
