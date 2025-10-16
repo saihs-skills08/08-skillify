@@ -4,7 +4,7 @@ import { getUserProjects } from "./actions";
 import { client } from "@/appwrite";
 import { FaJava } from "react-icons/fa";
 import { TbBrandKotlin } from "react-icons/tb";
-import { EllipsisVertical, Search, X } from "lucide-react";
+import { Edit, EllipsisVertical, Search, Trash, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
@@ -51,7 +51,7 @@ export default function ProjectList({
   }, []);
 
   return (
-    <div>
+    <>
       {isEmpty && <NoProjects />}
       {!isEmpty && (
         <InputGroup className="mb-4">
@@ -109,12 +109,13 @@ export default function ProjectList({
                     <DropdownMenuItem
                       onClick={() => setShowDeleteProject(project.$id)}
                     >
-                      刪除
+                      <Trash /> 刪除
                     </DropdownMenuItem>
                     <DropdownMenuItem
                       onClick={() => setShowRenameProject(project.$id)}
                     >
-                      重新命名
+                      <Edit />
+                      編輯
                     </DropdownMenuItem>
                   </DropdownMenuContent>
                 </DropdownMenu>
@@ -132,6 +133,6 @@ export default function ProjectList({
             ),
         )}
       </div>
-    </div>
+    </>
   );
 }

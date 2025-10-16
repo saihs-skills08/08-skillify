@@ -59,7 +59,7 @@ export default async function NavBar() {
                 </div>
               </DropdownMenuLabel>
               <DropdownMenuSeparator />
-              <DropdownMenuItem>Profile</DropdownMenuItem>
+              {/* <DropdownMenuItem>Profile</DropdownMenuItem> */}
               <DropdownMenuItem
                 onClick={async () => {
                   "use server";
