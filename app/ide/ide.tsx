@@ -1,5 +1,13 @@
 "use client";
-import { ArrowLeft, Check, LoaderIcon, Play, Square, X } from "lucide-react";
+import {
+  ArrowLeft,
+  Check,
+  Edit,
+  LoaderIcon,
+  Play,
+  Square,
+  X,
+} from "lucide-react";
 import { Button } from "@/components/ui/button";
 import dynamic from "next/dynamic";
 import { useEffect, useRef, useState } from "react";
@@ -10,6 +18,7 @@ import { TbBrandKotlin } from "react-icons/tb";
 import { FaJava } from "react-icons/fa";
 import Link from "next/link";
 import { Badge } from "@/components/ui/badge";
+import { EditProject } from "@/components/utils/project-actions";
 
 const MonacoEditor = dynamic(() => import("@monaco-editor/react"), {
   ssr: false,
@@ -26,6 +35,7 @@ export default function Ide({
   const [code, setCode] = useState((project.content as string) || "");
   const [isRunning, setIsRunning] = useState(false);
   const [isBackup, setIsBackup] = useState(true);
+  const [showEditProject, setShowEditProject] = useState(false);
   const terminalRef = useRef<HTMLDivElement>(null);
   const terminalInstanceRef = useRef<any>(null);
   const fitAddonRef = useRef<any>(null);
@@ -43,7 +53,7 @@ export default function Ide({
   useEffect(() => {
     const handler = setTimeout(() => {
       updateProjectContent(projectId, code).then(() => {});
-    }, 500);
+    }, 1000);
     return () => {
       clearTimeout(handler);
     };
@@ -125,75 +135,95 @@ export default function Ide({
   }
 
   return (
-    <div className="block" style={{ height: "calc(100vh - 70px)" }}>
-      <div className="flex items-center justify-between" ref={navbarRef}>
-        <div>
-          <div className="flex items-center gap-2">
-            <Link href="/projects">
-              <ArrowLeft className="h-5 w-5" />
-            </Link>
-            <span className="text-3xl">
-              {project.language === "kotlin" ? <TbBrandKotlin /> : <FaJava />}
-            </span>
-            <div>
-              <div className="flex items-center gap-2">
-                <p className="font-bold text-xl">{project.name}</p>
-                <Badge
-                  variant="outline"
-                  className={`${isBackup ? "text-gray-400" : "text-gray-500"}`}
-                >
-                  {isBackup ? <Check /> : <X />}
-                  {isBackup ? "專案已儲存" : "專案尚未儲存"}
-                </Badge>
+    <>
+      <EditProject
+        project={project}
+        isOpen={showEditProject}
+        setOpen={setShowEditProject}
+      />
+      <div className="block" style={{ height: "calc(100vh - 70px)" }}>
+        <div className="flex items-center justify-between" ref={navbarRef}>
+          <div>
+            <div className="flex items-center gap-2">
+              <Link href="/projects">
+                <ArrowLeft className="h-5 w-5" />
+              </Link>
+              <span className="text-3xl">
+                {project.language === "kotlin" ? <TbBrandKotlin /> : <FaJava />}
+              </span>
+              <div>
+                <div className="flex items-center gap-2">
+                  <div className="flex items-center gap-1">
+                    <p className="font-bold text-xl">{project.name}</p>
+                    <Button
+                      variant="ghost"
+                      size="sm"
+                      onClick={() => setShowEditProject(true)}
+                    >
+                      <Edit />
+                    </Button>
+                  </div>
+                </div>
+                <p className="text-xs monospace">{project.filename}</p>
               </div>
-              <p className="text-xs monospace">{project.filename}</p>
             </div>
           </div>
+          <div className="flex items-center gap-2">
+            {isRunning ? (
+              <div className="flex items-center text-gray-400 font-bold gap-1 text-xs">
+                <LoaderIcon className="animate-spin h-4 w-4" />
+                <p>執行中</p>
+              </div>
+            ) : (
+              <Badge
+                variant="outline"
+                className={`${isBackup ? "text-gray-400" : "text-gray-500"}`}
+              >
+                {isBackup ? <Check /> : <X />}
+                {isBackup ? "專案已儲存" : "專案尚未儲存"}
+              </Badge>
+            )}
+            {isRunning ? (
+              <Button
+                onClick={stopCode}
+                className="bg-red-500 hover:bg-red-600"
+              >
+                <Square />
+                結束
+              </Button>
+            ) : (
+              <Button
+                onClick={runCode}
+                className="bg-green-500 hover:bg-green-600"
+              >
+                <Play />
+                執行
+              </Button>
+            )}
+          </div>
         </div>
-        <div className="flex items-center gap-2">
-          {isRunning && (
-            <div className="flex items-center text-gray-400 font-bold gap-1 text-xs">
-              <LoaderIcon className="animate-spin h-4 w-4" />
-              <p>執行中</p>
-            </div>
-          )}
-          {isRunning ? (
-            <Button onClick={stopCode} className="bg-red-500 hover:bg-red-600">
-              <Square />
-              結束
-            </Button>
-          ) : (
-            <Button
-              onClick={runCode}
-              className="bg-green-500 hover:bg-green-600"
-            >
-              <Play />
-              執行
-            </Button>
-          )}
+        <div
+          className="grid lg:grid-cols-1 grid-cols-1 gap-2"
+          style={{
+            height: `calc(100vh - ${40 + 80}px)`,
+          }}
+        >
+          <div className="rounded-lg overflow-hidden border-2 m-2">
+            <MonacoEditor
+              height="90vh"
+              defaultLanguage={project.language}
+              value={code}
+              onChange={(x) => setCode(x || "")}
+              options={{
+                minimap: { enabled: false },
+              }}
+            />
+          </div>
+          <div className="rounded-lg border-2 m-2 p-4">
+            <div ref={terminalRef}></div>
+          </div>
         </div>
       </div>
-      <div
-        className="grid lg:grid-cols-1 grid-cols-1 gap-2"
-        style={{
-          height: `calc(100vh - ${40 + 80}px)`,
-        }}
-      >
-        <div className="rounded-lg overflow-hidden border-2 m-2">
-          <MonacoEditor
-            height="90vh"
-            defaultLanguage="java"
-            value={code}
-            onChange={(x) => setCode(x || "")}
-            options={{
-              minimap: { enabled: false },
-            }}
-          />
-        </div>
-        <div className="rounded-lg border-2 m-2 p-4">
-          <div ref={terminalRef}></div>
-        </div>
-      </div>
-    </div>
+    </>
   );
 }

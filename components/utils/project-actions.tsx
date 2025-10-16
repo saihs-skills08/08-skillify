@@ -8,7 +8,7 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
-import { deleteProject, renameProject } from "./actions";
+import { deleteProject, renameProject } from "../../app/projects/actions";
 import { Input } from "@/components/ui/input";
 import {
   Select,
@@ -53,7 +53,7 @@ export function DeleteProject({
   );
 }
 
-export function RenameProject({
+export function EditProject({
   project,
   isOpen,
   setOpen,
