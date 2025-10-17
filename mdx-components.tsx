@@ -1,4 +1,4 @@
-import { Hash } from "lucide-react";
+import { Hash, SquareArrowUpRight } from "lucide-react";
 import type { MDXComponents } from "mdx/types";
 import ReadEditor from "./components/utils/ReadEditor";
 
@@ -26,7 +26,7 @@ const components: MDXComponents = {
     );
   },
 
-  p: ({ children }) => <p className="mx-2 leading-6">{children}</p>,
+  p: ({ children }) => <p className="mx-2 leading-7">{children}</p>,
   img: (props) => (
     <img {...props} className="rounded-xl drop-shadow-xl mx-auto my-3" />
   ),
@@ -34,9 +34,10 @@ const components: MDXComponents = {
   a: ({ children, href }) => (
     <a
       href={href}
-      className="text-green-600 hover:underline hover:text-green-400 transition-colors break-all"
+      className="flex items-center gap-1 text-green-600 hover:underline hover:text-green-400 transition-colors break-all"
     >
       {children}
+      <SquareArrowUpRight size={20} />
     </a>
   ),
   ul: ({ children }) => <ul className="list-disc my-3 ml-6">{children}</ul>,
@@ -47,9 +48,14 @@ const components: MDXComponents = {
       {children}
     </blockquote>
   ),
-  code: ({ children }) => (
-    <ReadEditor code={String(children)} language="java" />
-  ),
+  code: ({ children }) =>
+    String(children).includes("\n") ? (
+      <ReadEditor code={String(children)} language="java" />
+    ) : (
+      <code className="bg-green-100 text-green-800 px-2 mx-2 py-0.5 rounded-md">
+        {children}
+      </code>
+    ),
   table: ({ children }) => (
     <table className="border-collapse border border-green-300 my-4 mx-auto w-full">
       {children}

@@ -16,7 +16,7 @@ export default function ReadEditor({
   language = "javascript",
 }: CodeBlockProps) {
   return (
-    <div className="m-1 p-1 border-2 border-green-100 rounded-xl">
+    <div className="m-1 py-1 border-2 border-green-100 rounded-xl">
       <MonacoEditor
         height="150px"
         defaultLanguage={language}
@@ -25,6 +25,7 @@ export default function ReadEditor({
           readOnly: true,
           minimap: { enabled: false },
           fontSize: 14,
+          lineNumbers: "off",
         }}
       />
     </div>
