@@ -16,7 +16,7 @@ const geistMono = Geist_Mono({
 
 export const metadata: Metadata = {
   title: "08 Skillify",
-  description: "Start your skill journey as a mobile app developer",
+  description: "培訓GuideBook、練習題目、Kotlin與Java的線上IDE",
 };
 
 export default function RootLayout({
