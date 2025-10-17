@@ -21,7 +21,7 @@ export default function BookLayout({
           </Link>
         </div>
       )}
-      <div className="mt-10 mb-20">{children}</div>
+      <div className={`${isBookPage ? "mt-15" : ""} mb-20`}>{children}</div>
     </section>
   );
 }
