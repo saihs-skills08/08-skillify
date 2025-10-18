@@ -4,7 +4,7 @@ import ReadEditor from "./components/utils/ReadEditor";
 
 const components: MDXComponents = {
   h1: ({ children }) => (
-    <h1 className="font-extrabold text-5xl bg-gradient-to-tr from-green-500 text-transparent to-green-200 bg-clip-text mb-5">
+    <h1 className="font-extrabold text-5xl bg-gradient-to-tr from-green-500 text-transparent to-teal-100 bg-clip-text mb-5">
       {children}
     </h1>
   ),
@@ -13,7 +13,7 @@ const components: MDXComponents = {
     return (
       <a
         href={`#${id}`}
-        className="flex items-center gap-1 hover:text-green-400 transition-colors"
+        className="flex items-center gap-1 hover:text-green-600 transition-colors"
       >
         <h2
           id={id}
@@ -34,7 +34,7 @@ const components: MDXComponents = {
   a: ({ children, href }) => (
     <a
       href={href}
-      className="flex items-center gap-1 text-green-600 hover:underline hover:text-green-400 transition-colors break-all"
+      className="flex items-center gap-1 text-green-600 hover:underline hover:text-green-700 transition-colors break-all"
     >
       {children}
       <SquareArrowUpRight size={20} />
@@ -56,24 +56,6 @@ const components: MDXComponents = {
         {children}
       </code>
     ),
-  table: ({ children }) => (
-    <table className="border-collapse border border-green-300 my-4 mx-auto w-full">
-      {children}
-    </table>
-  ),
-  thead: ({ children }) => <thead className="bg-green-100">{children}</thead>,
-  tbody: ({ children }) => <tbody>{children}</tbody>,
-  tr: ({ children }) => (
-    <tr className="border border-green-200 even:bg-green-50">{children}</tr>
-  ),
-  th: ({ children }) => (
-    <th className="border border-green-200 px-4 py-2 text-left bg-green-200">
-      {children}
-    </th>
-  ),
-  td: ({ children }) => (
-    <td className="border border-green-200 px-4 py-2">{children}</td>
-  ),
 };
 
 export function useMDXComponents(): MDXComponents {

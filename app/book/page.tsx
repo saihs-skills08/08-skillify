@@ -6,9 +6,7 @@ export default function BookPage() {
   return (
     <div>
       <div className="flex items-center justify-between">
-        <h1 className="text-4xl font-bold bg-gradient-to-tr from-green-500 text-transparent to-[#66C894] bg-clip-text">
-          GuideBook
-        </h1>
+        <h1 className="text-4xl font-bold text-green-500">GuideBook</h1>
         <Badge variant="outline">Work in progress...</Badge>
       </div>
       <div className="flex flex-col mt-4 gap-2">
