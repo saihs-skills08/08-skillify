@@ -30,7 +30,7 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        <NextTopLoader color="#5BC58D" height={4} />
+        <NextTopLoader color="#5BC58D" height={4} showSpinner={false} />
         <NavBar />
         <div className="mt-17">{children}</div>
       </body>
