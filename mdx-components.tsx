@@ -52,7 +52,7 @@ const components: MDXComponents = {
     String(children).includes("\n") ? (
       <ReadEditor code={String(children)} language="java" />
     ) : (
-      <code className="bg-green-100 text-green-800 px-2 mx-2 py-0.5 rounded-md">
+      <code className="bg-green-100 text-green-800 px-1 mx-1 py-0.5 rounded-md">
         {children}
       </code>
     ),

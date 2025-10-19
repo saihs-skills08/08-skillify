@@ -127,6 +127,48 @@ System.out.printf("a = %d,b = %d",a,b); // 計算後
 
 ## While 跑跑跑
 
+while迴圈可以在`()`中的執行條件成立時，重複執行被`{}`包起來的程式碼，當`()`中的條件不成立時或在迴圈中使用`break;`語法時便會結束這個迴圈。
+而如果在迴圈中使用`continue;`語法時程式便會跳過該語法在迴圈中之後的程式有就是直接結束這次的迴圈，直接執行下一輪迴圈。
+
+舉個簡單的例子，像下面這個程式因為`while`的執行條件為`true`所以他會一直跑直到你手動把程式給結束掉，我們稱這種迴圈為無窮迴圈，
+
+```java
+while (true) {
+    System.out.println("這個程式會執行");
+}
+```
+
+以下是兩個執行解果相同的程式：
+
+使用`while`內建的判斷式
+
+```java
+int a = 0;
+
+while (a < 10) {
+    System.out.println(a);
+    a++;
+}
+
+System.out.printf("迴圈結束");
+```
+
+在`while`的判斷式代`true`，在迴圈中使用`if`進行判斷使否要結束迴圈
+
+```java
+int a = 0;
+
+while (true) {
+    if (a >= 10){
+        break;
+    }
+    System.out.println(a);
+    a++;
+}
+
+System.out.printf("迴圈結束");
+```
+
 ## For 迴圈
 
 ## 陣列
