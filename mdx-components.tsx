@@ -1,6 +1,7 @@
 import { Hash, SquareArrowUpRight } from "lucide-react";
 import type { MDXComponents } from "mdx/types";
 import ReadEditor from "./components/utils/ReadEditor";
+import CodeBlock from "./components/utils/HighlightCode";
 
 const components: MDXComponents = {
   h1: ({ children }) => (
@@ -9,7 +10,7 @@ const components: MDXComponents = {
     </h1>
   ),
   h2: ({ children }) => {
-    const id = children.toLowerCase().replace(/\s+/g, "-"); // convert text to id
+    const id = children.toLowerCase().replace(/\s+/g, "-");
     return (
       <a
         href={`#${id}`}
@@ -50,7 +51,8 @@ const components: MDXComponents = {
   ),
   code: ({ children }) =>
     String(children).includes("\n") ? (
-      <ReadEditor code={String(children)} language="java" />
+      // <ReadEditor code={String(children)} language="java" />
+      <CodeBlock code={String(children)} language="java" />
     ) : (
       <code className="bg-green-100 text-green-800 px-1 mx-1 py-0.5 rounded-md">
         {children}
