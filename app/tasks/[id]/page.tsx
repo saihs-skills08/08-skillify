@@ -8,9 +8,9 @@ import { MDXRemote } from "next-mdx-remote-client/rsc";
 export default async function TaskInfoPage({
   params,
 }: {
-  params: { id: string };
+  params: Promise<{ id: string }>;
 }) {
-  const { id } = params;
+  const { id } = await params;
   const task = (await db.getDocument("db", "tasks", id)) as any as Task;
   const user = await getUserInfo(task.creator.$id);
   return (
