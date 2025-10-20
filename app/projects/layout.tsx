@@ -13,7 +13,7 @@ export default async function ProjectsLayout({
   return session?.user ? (
     <div className="p-4 max-w-3xl mx-auto fade-in">
       <div className="flex items-center justify-between pb-5">
-        <h1 className="text-4xl font-bold text-green-600">我的專案</h1>
+        <h1 className="text-4xl font-bold ">我的專案</h1>
         <NewProjectDialog />
       </div>
       <div className="">{children}</div>

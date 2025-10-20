@@ -26,3 +26,26 @@ interface BookPage {
   title: string;
   link: string;
 }
+
+interface TaskResult {
+  $id:string;
+  input: string = "";
+  output: string = "";
+}
+
+interface Task{
+  $id: string;
+  title: string;
+  info: string;
+  creator: User;
+  language: string;
+  tasksResults: TaskResult[];
+}
+
+interface User{
+  $id: string;
+  name: string;
+  email: string;
+  avatar: string;
+  role: "user" | "expert";
+}

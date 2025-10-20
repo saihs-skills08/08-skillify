@@ -12,15 +12,17 @@ import {
 import { User } from "lucide-react";
 import { signIn, auth, signOut } from "@/auth";
 import Link from "next/link";
+import ShadowWarpper from "./ShadowWarpper";
 
 export default async function NavBar() {
   const session = await auth();
   const navItems: NavItem[] = [
-    { name: "IDE", href: "/projects" },
+    { name: "專案", href: "/projects" },
     { name: "GuideBook", href: "/book" },
+    { name: "題目", href: "/tasks" },
   ];
   return (
-    <nav className="py-3 px-4 backdrop-blur-xl fixed w-full top-0 z-10">
+    <ShadowWarpper className="py-3 px-4 bg-white w-full top-0 z-10 fixed">
       <div className="flex justify-between items-center max-w-7xl mx-auto">
         <div className="flex items-center gap-3">
           <Link href="/">
@@ -87,6 +89,6 @@ export default async function NavBar() {
           </div>
         )}
       </div>
-    </nav>
+    </ShadowWarpper>
   );
 }

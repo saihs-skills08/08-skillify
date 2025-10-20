@@ -3,6 +3,7 @@ import { Geist, Geist_Mono } from "next/font/google";
 import NavBar from "@/components/layout/NavBar";
 import "./globals.css";
 import NextTopLoader from "nextjs-toploader";
+import { Toaster } from "sonner";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -32,6 +33,7 @@ export default function RootLayout({
       >
         <NextTopLoader color="#5BC58D" height={4} showSpinner={false} />
         <NavBar />
+        <Toaster position="bottom-right" />
         <div className="mt-17">{children}</div>
       </body>
     </html>
