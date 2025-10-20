@@ -24,33 +24,33 @@ export default async function TaskInfoPage({
       </div>
       <div className="flex items-center justify-between my-4">
         <h1 className="text-3xl font-bold">{task.title}</h1>
-        <Badge>{task.language}</Badge>
+        <Badge variant="secondary">{task.language}</Badge>
       </div>
       <MDXRemote source={task.info} components={taskComponents} />
       <div className="mt-4">
         {task.tasksResults.map((result, index) => {
           const ResultComponent = `
-# 範例${index + 1}
-${result.input != "" && `輸入範例`}
-${
-  result.input != "" &&
-  `
-\`\`\`java
-${result.input}
-\`\`\`
-`
-}
-${result.output != "" && `輸出範例`}
-${
-  result.output != "" &&
-  `
-\`\`\`java
-${result.output}
-\`\`\`
----
-`
-}
-`;
+            # 範例${index + 1}
+            ${result.input != "" && `輸入範例`}
+            ${
+              result.input != "" &&
+              `
+            \`\`\`java
+            ${result.input}
+            \`\`\`
+            `
+            }
+            ${result.output != "" && `輸出範例`}
+            ${
+              result.output != "" &&
+              `
+            \`\`\`java
+            ${result.output}
+            \`\`\`
+            ---
+            `
+            }
+            `;
 
           return (
             <div key={result.$id}>

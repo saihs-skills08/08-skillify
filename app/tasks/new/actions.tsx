@@ -13,6 +13,6 @@ export async function submitNewTask(data: FormData) {
     language: data.get("language")?.valueOf(),
     creator: session?.user?.id as string,
     tasksResults: results,
+    public: data.get("public") === "on" ? true : false,
   });
-  return true;
 }

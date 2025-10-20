@@ -89,15 +89,19 @@ export const components: MDXComponents = {
       {children}
     </blockquote>
   ),
-  code: ({ children }) =>
-    String(children).includes("\n") ? (
+  code: ({ className, children }) => {
+    const language = className ? className.replace("language-", "") : "";
+    const codeString = String(children).replace(/^\n+|\n+$/g, "");
+
+    return String(children).includes("\n") ? (
       // <ReadEditor code={String(children)} language="java" />
-      <CodeBlock code={String(children)} language="java" />
+      <CodeBlock code={codeString} language={language} />
     ) : (
       <code className="bg-green-100 text-green-800 px-1 mx-1 py-0.5 rounded-md">
         {children}
       </code>
-    ),
+    );
+  },
 };
 
 export function useMDXComponents(): MDXComponents {

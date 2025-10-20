@@ -3,10 +3,14 @@ import TasksList from "./list";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { getUserInfo } from "@/components/utils/getUserInfo";
+import { Query } from "appwrite";
 
 export default async function TasksPage() {
-  const tasks = await db.listDocuments("db", "tasks");
   const userInfo = await getUserInfo();
+  const tasks = await db.listDocuments("db", "tasks", [
+    Query.orderDesc("$updatedAt"),
+    ...(userInfo.role !== "expert" ? [Query.equal("public", true)] : []),
+  ]);
   return (
     <div>
       <div className="flex items-center justify-between pb-5">

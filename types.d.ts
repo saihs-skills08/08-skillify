@@ -40,6 +40,7 @@ interface Task{
   creator: User;
   language: string;
   tasksResults: TaskResult[];
+  public:boolean;
 }
 
 interface User{

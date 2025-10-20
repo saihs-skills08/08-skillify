@@ -40,7 +40,7 @@ export default function ProjectList({
   const [searchText, setSearchText] = useState<string>("");
 
   useEffect(() => {
-    client.subscribe(["documents"], (response) => {
+    const unsubscribe = client.subscribe(["documents"], (response) => {
       if (
         response.channels.includes(
           "databases.db.collections.projects.documents",
@@ -52,6 +52,9 @@ export default function ProjectList({
         });
       }
     });
+    return () => {
+      unsubscribe();
+    };
   }, []);
 
   return (

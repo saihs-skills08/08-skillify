@@ -14,7 +14,7 @@ export default function TasksList({ tasksData }: { tasksData: Task[] }) {
             <Link href={`/tasks/${task.$id}`}>
               <div className="px-2 py-4 border rounded-lg flex items-center gap-2 hover:bg-green-50 duration-100 justify-between">
                 <h2 className="text-lg">{task.title}</h2>
-                <Badge>{task.language}</Badge>
+                <Badge variant="secondary">{task.language}</Badge>
               </div>
             </Link>
           </li>

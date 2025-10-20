@@ -35,6 +35,7 @@ export async function getUserProjects() {
   const session = await auth();
   const { documents: projects } = (await db.listDocuments("db", "projects", [
     Query.equal("owner", session?.user?.id ?? ("" as string)),
+    Query.orderDesc("$updatedAt"),
   ])) as any as { documents: Project[] };
   return projects;
 }

@@ -1,22 +1,17 @@
 "use client";
-import { Button } from "@/components/ui/button";
+import { useState } from "react";
+import { toast } from "sonner";
+import { editTask } from "./actions";
 import { Input } from "@/components/ui/input";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
-import { submitNewTask } from "./actions";
-import { useEffect, useState } from "react";
-import { Card } from "@/components/ui/card";
+import ReactMarkdown from "react-markdown";
+import { Button } from "@/components/ui/button";
 import { ID } from "appwrite";
+import { Card } from "@/components/ui/card";
+import { Badge, BrushCleaning, Trash } from "lucide-react";
+import { Switch } from "@/components/ui/switch";
 import { Label } from "@/components/ui/label";
-import { Badge } from "@/components/ui/badge";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import { BrushCleaning, Trash } from "lucide-react";
 import {
   Empty,
   EmptyDescription,
@@ -26,28 +21,33 @@ import {
 } from "@/components/ui/empty";
 import {
   Tooltip,
-  TooltipTrigger,
   TooltipContent,
+  TooltipTrigger,
 } from "@/components/ui/tooltip";
-import { useRouter } from "next/navigation";
-import { toast } from "sonner";
-import ReactMarkdown from "react-markdown";
-import { components, taskComponents } from "@/mdx-components";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { taskComponents } from "@/mdx-components";
 import remarkGfm from "remark-gfm";
-import { Switch } from "@/components/ui/switch";
+import { useParams, useRouter } from "next/navigation";
 
-export default function CreateNewTasks() {
+export default function EditTaskPage({ task }: { task: Task }) {
   const router = useRouter();
   const [taskResults, setTaskResults] = useState<TaskResult[]>([]);
   const [infoText, setInfoText] = useState<string>("");
 
   return (
     <div>
+      {task.title}
       <h1 className="text-4xl font-bold">建立題目</h1>
       <form
         className="mt-5 flex flex-col gap-4"
         action={async (data) => {
-          toast.promise(submitNewTask(data), {
+          toast.promise(editTask(data), {
             loading: "題目建立中...",
             success: () => {
               router.push("/tasks");
@@ -58,6 +58,7 @@ export default function CreateNewTasks() {
         }}
       >
         <div className="flex gap-4">
+          {" "}
           <Input placeholder="標題" name="title" required />
           <Select name="language" required>
             <SelectTrigger>
@@ -189,7 +190,7 @@ export default function CreateNewTasks() {
           <Switch name="public" defaultChecked={true} />
         </div>
         <Button type="submit" className="mt-5">
-          建立
+          變更
         </Button>
       </form>
     </div>

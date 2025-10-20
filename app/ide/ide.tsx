@@ -43,7 +43,7 @@ export default function Ide({
   const navbarRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    client.subscribe(["documents"], (response) => {
+    const unsubscribe = client.subscribe(["documents"], (response) => {
       if (
         response.events.includes(
           `databases.db.collections.projects.documents.${project.$id}.update`,
@@ -54,6 +54,9 @@ export default function Ide({
         });
       }
     });
+    return () => {
+      unsubscribe();
+    };
   }, []);
 
   useEffect(() => {

@@ -9,7 +9,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
-import { submitNewTask } from "./actions";
+import { submitNewTask } from "../../app/tasks/new/actions";
 import { useEffect, useState } from "react";
 import { Card } from "@/components/ui/card";
 import { ID } from "appwrite";
@@ -36,14 +36,14 @@ import { components, taskComponents } from "@/mdx-components";
 import remarkGfm from "remark-gfm";
 import { Switch } from "@/components/ui/switch";
 
-export default function CreateNewTasks() {
+export default function CreateNewTasks({ edit }: { edit: boolean }) {
   const router = useRouter();
   const [taskResults, setTaskResults] = useState<TaskResult[]>([]);
   const [infoText, setInfoText] = useState<string>("");
 
   return (
     <div>
-      <h1 className="text-4xl font-bold">建立題目</h1>
+      <h1 className="text-4xl font-bold">{edit ? "編輯" : "建立"}題目</h1>
       <form
         className="mt-5 flex flex-col gap-4"
         action={async (data) => {
