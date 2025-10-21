@@ -16,6 +16,7 @@ import { deleteTask } from "../actions";
 import Link from "next/link";
 import { redirect } from "next/navigation";
 import { toast } from "sonner";
+import { auth } from "@/auth";
 
 export default async function TaskInfoPage({
   params,
@@ -24,7 +25,8 @@ export default async function TaskInfoPage({
 }) {
   const { id } = await params;
   const task = (await db.getDocument("db", "tasks", id)) as any as Task;
-  const user = await getUserInfo(task.creator.$id);
+  const session = await auth();
+  const user = await getUserInfo(session?.user?.id || "");
 
   return (
     <section>
@@ -36,16 +38,16 @@ export default async function TaskInfoPage({
       </Link>
       <div className="flex gap-1 items-center mt-2">
         <Avatar className="h-5 w-5">
-          <AvatarImage src={user.avatar} />
-          <AvatarFallback>{user.name.charAt(0)}</AvatarFallback>
+          <AvatarImage src={task.creator.avatar} />
+          <AvatarFallback>{task.creator.name.charAt(0)}</AvatarFallback>
         </Avatar>
-        <p className="text-gray-500 text-xs">由 {user.name} 創建</p>
+        <p className="text-gray-500 text-xs">由 {task.creator.name} 創建</p>
       </div>
       <div className="flex items-center justify-between my-4">
         <h1 className="text-3xl font-bold">{task.title}</h1>
         <div className="flex items-center">
           <Badge variant="secondary">{task.language}</Badge>
-          {user?.role === "expert" && (
+          {user.role === "expert" && (
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
                 <Button variant="outline" size="icon" className="ml-2">
