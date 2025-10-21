@@ -19,7 +19,7 @@ export default function BookLayout({
         <Link href="/tasks">
           <Button variant="ghost" className="mb-2">
             <CornerUpLeft />
-            <span>全部文檔</span>
+            <span>所有文檔</span>
           </Button>
         </Link>
       )}

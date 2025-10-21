@@ -198,3 +198,8 @@ System.out.println("迴圈結束");
 
 Yeee 看起來好像有點複雜耶，但是如果你把它和while迴圈比較看看，就會發現他其實就只是把它迴圈核心的邏輯簡化成一行而已喔~
 ![for vs while](https://hackmd.io/_uploads/B1IZSWGCge.png)
+
+## 陣列
+
+> Java陣列
+> [參考文檔](https://www.w3schools.com/java/java_arrays.asp)

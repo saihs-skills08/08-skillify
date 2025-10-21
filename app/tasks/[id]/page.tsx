@@ -33,7 +33,7 @@ export default async function TaskInfoPage({
       <Link href="/tasks">
         <Button variant="ghost" className="mb-2">
           <CornerUpLeft />
-          <span>全部題目</span>
+          <span>所有題目</span>
         </Button>
       </Link>
       <div className="flex gap-1 items-center mt-2">
