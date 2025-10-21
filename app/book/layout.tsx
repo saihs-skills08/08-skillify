@@ -2,8 +2,9 @@
 
 import { usePathname } from "next/navigation";
 import { pages } from "./book-data";
-import { ArrowLeft } from "lucide-react";
+import { ArrowLeft, CornerUpLeft } from "lucide-react";
 import Link from "next/link";
+import { Button } from "@/components/ui/button";
 
 export default function BookLayout({
   children,
@@ -14,6 +15,14 @@ export default function BookLayout({
   const isBookPage = pages.some((page) => pathname.startsWith(page.link));
   return (
     <section className="p-4 max-w-3xl mx-auto fade-in">
+      {isBookPage && (
+        <Link href="/tasks">
+          <Button variant="ghost" className="mb-2">
+            <CornerUpLeft />
+            <span>全部文檔</span>
+          </Button>
+        </Link>
+      )}
       {/* {isBookPage && ( */}
       {/*   <div className="mb-4 sticky top-16 pt-4 z-10"> */}
       {/*     <Link */}

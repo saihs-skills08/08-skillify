@@ -4,13 +4,16 @@ import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { getUserInfo } from "@/components/utils/getUserInfo";
 import { Query } from "appwrite";
+import { Metadata } from "next";
+import { getAllTasks } from "./actions";
+
+export const metadata: Metadata = {
+  title: "練習題目 | 08 Skillify",
+};
 
 export default async function TasksPage() {
   const userInfo = await getUserInfo();
-  const tasks = await db.listDocuments("db", "tasks", [
-    Query.orderDesc("$updatedAt"),
-    ...(userInfo.role !== "expert" ? [Query.equal("public", true)] : []),
-  ]);
+  const tasks = await getAllTasks(userInfo);
   return (
     <div>
       <div className="flex items-center justify-between pb-5">

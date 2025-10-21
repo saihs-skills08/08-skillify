@@ -16,7 +16,7 @@ import { ID } from "appwrite";
 import { Label } from "@/components/ui/label";
 import { Badge } from "@/components/ui/badge";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import { BrushCleaning, Trash } from "lucide-react";
+import { BrushCleaning, CornerUpLeft, Trash } from "lucide-react";
 import {
   Empty,
   EmptyDescription,
@@ -35,6 +35,7 @@ import ReactMarkdown from "react-markdown";
 import { components, taskComponents } from "@/mdx-components";
 import remarkGfm from "remark-gfm";
 import { Switch } from "@/components/ui/switch";
+import Link from "next/link";
 
 export default function CreateNewTasks() {
   const router = useRouter();
@@ -43,6 +44,13 @@ export default function CreateNewTasks() {
 
   return (
     <div>
+      <Link href="/tasks">
+        <Button variant="ghost" className="mb-2">
+          <CornerUpLeft />
+          <span>返回</span>
+        </Button>
+      </Link>
+
       <h1 className="text-4xl font-bold">建立題目</h1>
       <form
         className="mt-5 flex flex-col gap-4"
@@ -59,7 +67,7 @@ export default function CreateNewTasks() {
       >
         <div className="flex gap-4">
           <Input placeholder="標題" name="title" required />
-          <Select name="language" required>
+          <Select name="language" required defaultValue="java">
             <SelectTrigger>
               <SelectValue placeholder="平台" />
             </SelectTrigger>
@@ -105,7 +113,7 @@ export default function CreateNewTasks() {
             新增執行結果範例
           </Button>
         </div>
-        <ScrollArea className="h-130 border rounded-xl">
+        <ScrollArea className="h-100 border rounded-xl">
           <ul className="m-4">
             {taskResults.length > 0 ? (
               taskResults.map((result, index) => (

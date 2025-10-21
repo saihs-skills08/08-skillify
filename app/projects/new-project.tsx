@@ -55,7 +55,7 @@ export default function NewProjectDialog() {
           </div>
           <div>
             <Label className="mb-1">程式語言</Label>
-            <Select required name="language">
+            <Select required name="language" defaultValue="java">
               <SelectTrigger className="w-full">
                 <SelectValue placeholder="程式語言" />
               </SelectTrigger>

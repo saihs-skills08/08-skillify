@@ -1,12 +1,17 @@
+import type { Metadata } from "next";
 import Link from "next/link";
 import { pages } from "./book-data";
 import { Badge } from "@/components/ui/badge";
+
+export const metadata: Metadata = {
+  title: "GuideBook | 08 Skillify",
+};
 
 export default function BookPage() {
   return (
     <div>
       <div className="flex items-center justify-between">
-        <h1 className="text-4xl font-bold">GuideBook</h1>
+        <h1 className="text-4xl font-bold">培訓文檔</h1>
         <Badge variant="outline">Work in progress...</Badge>
       </div>
       <div className="flex flex-col mt-4 gap-2">

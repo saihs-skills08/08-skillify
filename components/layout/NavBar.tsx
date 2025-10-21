@@ -18,7 +18,7 @@ export default async function NavBar() {
   const session = await auth();
   const navItems: NavItem[] = [
     { name: "專案", href: "/projects" },
-    { name: "GuideBook", href: "/book" },
+    { name: "文檔", href: "/book" },
     { name: "題目", href: "/tasks" },
   ];
   return (

@@ -8,7 +8,8 @@ import ReactMarkdown from "react-markdown";
 import { Button } from "@/components/ui/button";
 import { ID } from "appwrite";
 import { Card } from "@/components/ui/card";
-import { Badge, BrushCleaning, Trash } from "lucide-react";
+import { BrushCleaning, CornerUpLeft, Trash } from "lucide-react";
+import { Badge } from "@/components/ui/badge";
 import { Switch } from "@/components/ui/switch";
 import { Label } from "@/components/ui/label";
 import { ScrollArea } from "@/components/ui/scroll-area";
@@ -33,34 +34,46 @@ import {
 } from "@/components/ui/select";
 import { taskComponents } from "@/mdx-components";
 import remarkGfm from "remark-gfm";
-import { useParams, useRouter } from "next/navigation";
+import { useRouter } from "next/navigation";
+import Link from "next/link";
 
 export default function EditTaskPage({ task }: { task: Task }) {
   const router = useRouter();
-  const [taskResults, setTaskResults] = useState<TaskResult[]>([]);
-  const [infoText, setInfoText] = useState<string>("");
+  const [taskResults, setTaskResults] = useState<TaskResult[]>(
+    task.tasksResults,
+  );
+  const [infoText, setInfoText] = useState<string>(task.info);
 
   return (
     <div>
-      {task.title}
-      <h1 className="text-4xl font-bold">建立題目</h1>
+      <Link href="/tasks">
+        <Button variant="ghost" className="mb-2">
+          <CornerUpLeft />
+          <span>取消</span>
+        </Button>
+      </Link>
+      <h1 className="text-4xl font-bold">編輯題目</h1>
       <form
         className="mt-5 flex flex-col gap-4"
         action={async (data) => {
-          toast.promise(editTask(data), {
-            loading: "題目建立中...",
+          toast.promise(editTask(data, task.$id), {
+            loading: "套用變更中...",
             success: () => {
-              router.push("/tasks");
-              return "題目建立成功！";
+              router.push(`/tasks/${task.$id}`);
+              return "變更套用成功！";
             },
-            error: "題目建立失敗，請稍後再試！",
+            error: "變更套用失敗，請稍後再試！",
           });
         }}
       >
         <div className="flex gap-4">
-          {" "}
-          <Input placeholder="標題" name="title" required />
-          <Select name="language" required>
+          <Input
+            placeholder="標題"
+            name="title"
+            required
+            defaultValue={task.title}
+          />
+          <Select name="language" required defaultValue={task.language}>
             <SelectTrigger>
               <SelectValue placeholder="平台" />
             </SelectTrigger>
@@ -77,6 +90,7 @@ export default function EditTaskPage({ task }: { task: Task }) {
             name="info"
             required
             onChange={(x) => setInfoText(x.target.value)}
+            defaultValue={task.info}
           />
           <div className="border rounded-lg p-4">
             <ReactMarkdown
@@ -106,7 +120,7 @@ export default function EditTaskPage({ task }: { task: Task }) {
             新增執行結果範例
           </Button>
         </div>
-        <ScrollArea className="h-130 border rounded-xl">
+        <ScrollArea className="h-100 border rounded-xl">
           <ul className="m-4">
             {taskResults.length > 0 ? (
               taskResults.map((result, index) => (
@@ -138,6 +152,7 @@ export default function EditTaskPage({ task }: { task: Task }) {
                     <Textarea
                       placeholder="輸入範例"
                       id="input"
+                      defaultValue={result.input}
                       onChange={(x) => {
                         setTaskResults((prev) =>
                           prev.map((r) =>
@@ -152,6 +167,7 @@ export default function EditTaskPage({ task }: { task: Task }) {
                     <Textarea
                       placeholder="輸出範例"
                       id="output"
+                      defaultValue={result.output}
                       onChange={(x) => {
                         setTaskResults((prev) =>
                           prev.map((r) =>
@@ -187,7 +203,7 @@ export default function EditTaskPage({ task }: { task: Task }) {
         />
         <div className="flex items-center gap-2">
           <Label htmlFor="public">公開</Label>
-          <Switch name="public" defaultChecked={true} />
+          <Switch name="public" defaultChecked={task.public} />
         </div>
         <Button type="submit" className="mt-5">
           變更

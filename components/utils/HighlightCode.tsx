@@ -6,15 +6,17 @@ import { oneDark } from "react-syntax-highlighter/dist/esm/styles/prism";
 export default function CodeBlock({
   code,
   language = "java",
+  showLineNumbers = true,
 }: {
   code: string;
   language?: string;
+  showLineNumbers?: boolean;
 }) {
   return (
     <SyntaxHighlighter
       language={language}
       style={oneDark}
-      showLineNumbers
+      showLineNumbers={showLineNumbers}
       customStyle={{
         borderRadius: "0.8rem",
         padding: "1rem",

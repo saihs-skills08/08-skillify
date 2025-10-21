@@ -8,7 +8,9 @@ export const taskComponents: MDXComponents = {
   h2: ({ children }) => {
     return <h2 className="font-bold text-xl">{children}</h2>;
   },
-  p: ({ children }) => <p className="leading-7">{children}</p>,
+  p: ({ children }) => (
+    <p className="leading-7 whitespace-pre-line">{children}</p>
+  ),
   img: (props) => <img {...props} className="rounded-xl mx-auto my-2" />,
   hr: () => <hr className="my-5 border-green-200" />,
   a: ({ children, href }) => (
@@ -32,7 +34,11 @@ export const taskComponents: MDXComponents = {
     const language = className ? className.replace("language-", "") : "";
     const codeString = String(children).replace(/^\n+|\n+$/g, "");
     return String(children).includes("\n") ? (
-      <CodeBlock code={codeString} language={language} />
+      <CodeBlock
+        code={codeString}
+        language={language}
+        showLineNumbers={false}
+      />
     ) : (
       <code className="bg-green-100 text-green-800 px-1 mx-1 py-0.5 rounded-md">
         {children}

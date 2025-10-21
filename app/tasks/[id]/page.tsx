@@ -1,9 +1,21 @@
 import { db } from "@/appwrite";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 import { getUserInfo } from "@/components/utils/getUserInfo";
 import { taskComponents } from "@/mdx-components";
+import { CornerUpLeft, Edit, MoreVertical, Trash } from "lucide-react";
 import { MDXRemote } from "next-mdx-remote-client/rsc";
+import { deleteTask } from "../actions";
+import Link from "next/link";
+import { redirect } from "next/navigation";
+import { toast } from "sonner";
 
 export default async function TaskInfoPage({
   params,
@@ -13,8 +25,15 @@ export default async function TaskInfoPage({
   const { id } = await params;
   const task = (await db.getDocument("db", "tasks", id)) as any as Task;
   const user = await getUserInfo(task.creator.$id);
+
   return (
     <section>
+      <Link href="/tasks">
+        <Button variant="ghost" className="mb-2">
+          <CornerUpLeft />
+          <span>全部題目</span>
+        </Button>
+      </Link>
       <div className="flex gap-1 items-center mt-2">
         <Avatar className="h-5 w-5">
           <AvatarImage src={user.avatar} />
@@ -24,7 +43,42 @@ export default async function TaskInfoPage({
       </div>
       <div className="flex items-center justify-between my-4">
         <h1 className="text-3xl font-bold">{task.title}</h1>
-        <Badge variant="secondary">{task.language}</Badge>
+        <div className="flex items-center">
+          <Badge variant="secondary">{task.language}</Badge>
+          {user?.role === "expert" && (
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button variant="outline" size="icon" className="ml-2">
+                  <MoreVertical />
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent className="m-2">
+                <DropdownMenuItem
+                  onClick={async () => {
+                    "use server";
+                    toast.promise(deleteTask(task.$id), {
+                      loading: "刪除題目中...",
+                      success: () => {
+                        redirect("/tasks");
+                        return "題目刪除成功！";
+                      },
+                      error: "題目刪除失敗，請稍後再試！",
+                    });
+                  }}
+                >
+                  <Trash />
+                  刪除
+                </DropdownMenuItem>
+                <Link href={`/tasks/edit/${task.$id}`}>
+                  <DropdownMenuItem>
+                    <Edit />
+                    編輯
+                  </DropdownMenuItem>
+                </Link>
+              </DropdownMenuContent>
+            </DropdownMenu>
+          )}
+        </div>
       </div>
       <MDXRemote source={task.info} components={taskComponents} />
       <div className="mt-4">
