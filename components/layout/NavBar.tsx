@@ -13,9 +13,12 @@ import { User } from "lucide-react";
 import { signIn, auth, signOut } from "@/auth";
 import Link from "next/link";
 import ShadowWarpper from "./ShadowWarpper";
+import { getUserInfo } from "../utils/getUserInfo";
+import { Badge } from "../ui/badge";
 
 export default async function NavBar() {
   const session = await auth();
+  const userInfo = await getUserInfo(session?.user?.id || "");
   const navItems: NavItem[] = [
     { name: "專案", href: "/projects" },
     { name: "文檔", href: "/book" },
@@ -60,6 +63,7 @@ export default async function NavBar() {
               <DropdownMenuLabel>
                 <div>
                   <p className="text-lg font-medium">{session.user.name}</p>
+                  <Badge className="mb-1">{userInfo.role.toUpperCase()}</Badge>
                   <p className="text-sm text-gray-400">{session.user.email}</p>
                 </div>
               </DropdownMenuLabel>
