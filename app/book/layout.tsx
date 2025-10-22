@@ -16,7 +16,7 @@ export default function BookLayout({
   return (
     <section className="p-4 max-w-3xl mx-auto fade-in">
       {isBookPage && (
-        <Link href="/tasks">
+        <Link href="/book">
           <Button variant="ghost" className="mb-2">
             <CornerUpLeft />
             <span>所有文檔</span>

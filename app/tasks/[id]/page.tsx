@@ -87,24 +87,26 @@ export default async function TaskInfoPage({
         {task.tasksResults.map((result, index) => {
           const ResultComponent = `
             # 範例${index + 1}
-            ${result.input != "" && `輸入範例`}
+            ${result.input != "" ? `輸入範例` : ""}
             ${
-              result.input != "" &&
-              `
+              result.input != ""
+                ? `
             \`\`\`java
             ${result.input}
             \`\`\`
             `
+                : ""
             }
-            ${result.output != "" && `輸出範例`}
+            ${result.output != "" ? `輸出範例` : ""}
             ${
-              result.output != "" &&
-              `
+              result.output != ""
+                ? `
             \`\`\`java
             ${result.output}
             \`\`\`
             ---
             `
+                : ""
             }
             `;
 
