@@ -1,11 +1,10 @@
-import { db } from "@/appwrite";
 import TasksList from "./list";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { getUserInfo } from "@/components/utils/getUserInfo";
-import { Query } from "appwrite";
 import { Metadata } from "next";
-import { getAllTasks } from "./actions";
+import { getAllTasks, getAssignmentsByUserId } from "./actions";
+import { getAssignment } from "./assignment/update-assignment-state";
 
 export const metadata: Metadata = {
   title: "練習題目 | 08 Skillify",
@@ -13,6 +12,7 @@ export const metadata: Metadata = {
 
 export default async function TasksPage() {
   const userInfo = await getUserInfo();
+  const assignments = await getAssignmentsByUserId(userInfo.$id);
   const tasks = await getAllTasks(userInfo);
   return (
     <div>
@@ -20,13 +20,20 @@ export default async function TasksPage() {
         <div>
           <h1 className="text-4xl font-bold ">練習題目</h1>
         </div>
-        {userInfo.role === "expert" && (
-          <Link href="/tasks/new">
-            <Button variant="outline">建立題目</Button>
-          </Link>
-        )}
+        <div className="flex items-center gap-2">
+          {userInfo.role === "expert" && (
+            <>
+              <Link href="/tasks/assignment">
+                <Button variant="ghost">檢視作業</Button>
+              </Link>
+              <Link href="/tasks/new">
+                <Button variant="outline">建立題目</Button>
+              </Link>
+            </>
+          )}
+        </div>
       </div>
-      <TasksList tasksData={tasks.documents as any} />
+      <TasksList tasksData={tasks.documents as any} assignments={assignments} />
     </div>
   );
 }

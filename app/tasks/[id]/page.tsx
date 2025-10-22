@@ -10,13 +10,40 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { getUserInfo } from "@/components/utils/getUserInfo";
 import { taskComponents } from "@/mdx-components";
-import { CornerUpLeft, Edit, MoreVertical, Trash } from "lucide-react";
+import { CornerUpLeft, Edit, MoreVertical, Send, Trash } from "lucide-react";
 import { MDXRemote } from "next-mdx-remote-client/rsc";
-import { deleteTask } from "../actions";
+import { deleteTask, getAssignmentsByUserId } from "../actions";
 import Link from "next/link";
 import { redirect } from "next/navigation";
 import { toast } from "sonner";
 import { auth } from "@/auth";
+import SubmitAssignment from "./submit-assignment";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
+import { DialogDescription } from "@radix-ui/react-dialog";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
+
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ id: string }>;
+}) {
+  const { id } = await params;
+  const task = await db.getDocument("db", "tasks", id);
+  return {
+    title: `${task.title} | 08 Skillify`,
+    description: `${task.info?.slice(0, 100) || "練習題目"}`,
+  };
+}
 
 export default async function TaskInfoPage({
   params,
@@ -27,6 +54,11 @@ export default async function TaskInfoPage({
   const task = (await db.getDocument("db", "tasks", id)) as any as Task;
   const session = await auth();
   const user = await getUserInfo(session?.user?.id || "");
+  const allAssignments = await getAssignmentsByUserId(session?.user?.id || "");
+  const currentTaskAssignments = allAssignments.findLast(
+    (assignment) => assignment.tasks.$id === task.$id
+  );
+  const hasSubmitted = !!currentTaskAssignments;
 
   return (
     <section>
@@ -45,12 +77,51 @@ export default async function TaskInfoPage({
       </div>
       <div className="flex items-center justify-between my-4">
         <h1 className="text-3xl font-bold">{task.title}</h1>
-        <div className="flex items-center">
+        <div className="flex items-center gap-2">
           <Badge variant="secondary">{task.language}</Badge>
+          <Dialog>
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <DialogTrigger asChild>
+                  <Button
+                    variant="outline"
+                    size="icon"
+                    className={`${
+                      hasSubmitted
+                        ? currentTaskAssignments.done
+                          ? "border-green-300 bg-green-100"
+                          : "border-orange-300 bg-orange-100"
+                        : ""
+                    }`}
+                  >
+                    <Send />
+                  </Button>
+                </DialogTrigger>
+              </TooltipTrigger>
+              <TooltipContent>
+                {hasSubmitted ? "重新繳交作業" : "繳交作業"}
+              </TooltipContent>
+            </Tooltip>
+            <DialogContent>
+              <DialogHeader>
+                <DialogTitle>
+                  {hasSubmitted ? "重新繳交作業" : "繳交作業"}
+                </DialogTitle>
+                <DialogDescription>
+                  請在下方的編輯器中貼上並提交你這個作業程式碼。
+                </DialogDescription>
+                <SubmitAssignment
+                  language={task.language}
+                  taskId={task.$id}
+                  assignment={currentTaskAssignments || ({} as Assignment)}
+                />
+              </DialogHeader>
+            </DialogContent>
+          </Dialog>
           {user.role === "expert" && (
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
-                <Button variant="outline" size="icon" className="ml-2">
+                <Button variant="outline" size="icon">
                   <MoreVertical />
                 </Button>
               </DropdownMenuTrigger>
@@ -117,6 +188,7 @@ export default async function TaskInfoPage({
           );
         })}
       </div>
+      <div></div>
     </section>
   );
 }

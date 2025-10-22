@@ -50,3 +50,12 @@ interface User{
   avatar: string;
   role: "user" | "expert";
 }
+
+interface Assignment{
+  $id: string;
+  $createdAt: string;
+  content: string;
+  tasks: Task;
+  owner: User;
+  done: boolean;
+}

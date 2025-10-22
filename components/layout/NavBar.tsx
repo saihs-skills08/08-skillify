@@ -51,7 +51,7 @@ export default async function NavBar() {
         {session?.user ? (
           <DropdownMenu>
             <DropdownMenuTrigger>
-              <Avatar className="w-10 h-10">
+              <Avatar className="w-10 h-10 hover:drop-shadow-lg duration-200">
                 <AvatarImage
                   src={session?.user?.image as string}
                   alt="User Avatar"

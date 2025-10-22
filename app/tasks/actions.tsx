@@ -13,3 +13,11 @@ export async function getAllTasks(userInfo: User) {
     ...(userInfo.role !== "expert" ? [Query.equal("public", true)] : []),
   ]);
 }
+
+export async function getAssignmentsByUserId(userId: string) {
+  if(!userId) return [];
+  const assignments = await db.listDocuments("db", "assignment", [
+    Query.equal("owner", userId),
+  ]);
+  return assignments.documents as any as Assignment[];
+}
