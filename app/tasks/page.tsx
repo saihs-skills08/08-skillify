@@ -4,7 +4,8 @@ import { Button } from "@/components/ui/button";
 import { getUserInfo } from "@/components/utils/getUserInfo";
 import { Metadata } from "next";
 import { getAllTasks, getAssignmentsByUserId } from "./actions";
-import { getAssignment } from "./assignment/update-assignment-state";
+import PageNotFound from "@/components/page/404";
+import { auth } from "@/auth";
 
 export const metadata: Metadata = {
   title: "練習題目 | 08 Skillify",

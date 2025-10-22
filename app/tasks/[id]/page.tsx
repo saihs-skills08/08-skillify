@@ -126,7 +126,7 @@ export default async function TaskInfoPage({
                 </Button>
               </DropdownMenuTrigger>
               <DropdownMenuContent className="m-2">
-                <DropdownMenuItem
+                {/* <DropdownMenuItem
                   onClick={async () => {
                     "use server";
                     toast.promise(deleteTask(task.$id), {
@@ -141,7 +141,7 @@ export default async function TaskInfoPage({
                 >
                   <Trash />
                   刪除
-                </DropdownMenuItem>
+                </DropdownMenuItem> */}
                 <Link href={`/tasks/edit/${task.$id}`}>
                   <DropdownMenuItem>
                     <Edit />
