@@ -7,6 +7,8 @@ export default async function Home() {
   const session = await auth();
   return (
     <div className="p-5 fade-in block fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 ">
+      <div className="w-100 h-100 rounded-full bg-green-500 absolute blur-[100px] opacity-50 drop-shadow-2xl"></div>
+      <div className="w-100 h-100 rounded-full bg-green-500 absolute blur-[200px] opacity-50 drop-shadow-2xl top-[-5rem] left-[-20rem]"></div>
       <div className="flex flex-col items-end">
         <Image
           src="/worldskills-logo.svg"

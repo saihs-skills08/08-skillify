@@ -16,6 +16,7 @@ export default async function EditPage({
     return PageNotFound();
   }
   const { id } = await params;
+
   const task = await getTaskById(id);
   const tags = await getTags();
 

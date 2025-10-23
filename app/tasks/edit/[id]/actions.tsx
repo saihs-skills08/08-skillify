@@ -4,6 +4,7 @@ import { db } from "@/appwrite";
 
 export async function editTask(data: FormData, id: string) {
   const results: TaskResult[] = JSON.parse(data.get("taskResults") as string);
+
   await db.updateDocument("db", "tasks", id, {
     title: data.get("title")?.valueOf(),
     info: data.get("info")?.valueOf(),

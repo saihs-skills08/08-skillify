@@ -44,20 +44,21 @@ import { taskComponents } from "@/mdx-components";
 import remarkGfm from "remark-gfm";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
+import { submitNewTask } from "../../new/actions";
 
 export default function EditTaskPage({
   task,
   allTags,
 }: {
-  task: Task;
+  task?: Task | null;
   allTags: Tag[];
 }) {
   const router = useRouter();
   const [taskResults, setTaskResults] = useState<TaskResult[]>(
-    task.tasksResults
+    task ? task.tasksResults : []
   );
-  const [infoText, setInfoText] = useState<string>(task.info);
-  const [tags, setTags] = useState<Tag[]>(task.tags);
+  const [infoText, setInfoText] = useState<string>(task ? task.info : "");
+  const [tags, setTags] = useState<Tag[]>(task ? task.tags : []);
   const [seletedTag, setSelectedTag] = useState<string>("");
 
   return (
@@ -72,14 +73,25 @@ export default function EditTaskPage({
       <form
         className="mt-5 flex flex-col gap-4"
         action={async (data) => {
-          toast.promise(editTask(data, task.$id), {
-            loading: "套用變更中...",
-            success: () => {
-              router.push(`/tasks/${task.$id}`);
-              return "變更套用成功！";
-            },
-            error: "變更套用失敗，請稍後再試！",
-          });
+          if (task) {
+            toast.promise(editTask(data, task.$id), {
+              loading: "套用變更中...",
+              success: () => {
+                router.push(`/tasks/${task.$id}`);
+                return "變更套用成功！";
+              },
+              error: "變更套用失敗，請稍後再試！",
+            });
+          } else {
+            toast.promise(submitNewTask(data), {
+              loading: "題目建立中...",
+              success: () => {
+                router.push("/tasks");
+                return "題目建立成功！";
+              },
+              error: "題目建立失敗，請稍後再試！",
+            });
+          }
         }}
       >
         <div className="flex gap-4">
@@ -87,9 +99,9 @@ export default function EditTaskPage({
             placeholder="標題"
             name="title"
             required
-            defaultValue={task.title}
+            defaultValue={task?.title}
           />
-          <Select name="language" required defaultValue={task.language}>
+          <Select name="language" required defaultValue={task?.language}>
             <SelectTrigger>
               <SelectValue placeholder="平台" />
             </SelectTrigger>
@@ -108,7 +120,7 @@ export default function EditTaskPage({
               <Link href="/tasks/tags">編輯標籤</Link>
             </Button>
           </div>
-          <div className="flex gap-2 overflow-x-scroll">
+          <div className="flex gap-2 overflow-x-auto pb-2">
             {tags.map((tag) => (
               <Badge key={tag.$id}>
                 {tag.name}
@@ -172,7 +184,7 @@ export default function EditTaskPage({
             name="info"
             required
             onChange={(x) => setInfoText(x.target.value)}
-            defaultValue={task.info}
+            defaultValue={task?.info}
           />
           <div className="border rounded-lg p-4">
             <ReactMarkdown
@@ -285,7 +297,7 @@ export default function EditTaskPage({
         />
         <div className="flex items-center gap-2">
           <Label htmlFor="public">公開</Label>
-          <Switch name="public" defaultChecked={task.public} />
+          <Switch name="public" defaultChecked={task?.public} />
         </div>
         <Button type="submit" className="mt-5">
           變更

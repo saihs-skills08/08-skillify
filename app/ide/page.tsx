@@ -1,7 +1,6 @@
 import { auth } from "@/auth";
 import Ide from "./ide";
 import { getProjectInfo } from "./ide-actions";
-import NotAuthed from "@/components/page/not-authed";
 import NotFound from "../not-found";
 
 export default async function IdePage({
