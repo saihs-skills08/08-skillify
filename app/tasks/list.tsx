@@ -64,7 +64,7 @@ export default function TasksList({
 
   return (
     <div>
-      <div className="flex mb-2 flex-warp">
+      <div className="flex pb-2 mb-1 overflow-x-auto">
         {allTags.map((tag) => (
           <button
             key={tag.$id}
@@ -105,11 +105,11 @@ export default function TasksList({
                 <div className="px-2 border rounded-lg flex items-center gap-2 hover:bg-green-50 duration-100 justify-between">
                   <Link href={`/tasks/${task.$id}`} className="w-full py-4">
                     <div className="flex items-center gap-2">
-                      <h2 className="text-lg pb-1">{task.title}</h2>
+                      <h2 className="text-lg">{task.title}</h2>
                       {!task.public && <Lock size={15} />}
                     </div>
                     <div className="flex flex-col gap-2">
-                      <div className="flex flex-wrap gap-1">
+                      <div className={`flex flex-wrap gap-1 ${task.tags.length !== 0 ? "mt-1" : ""}`}>
                         {task.tags.map((tag) => (
                           <Badge key={tag.$id} variant="outline">
                             {tag.name}

@@ -19,11 +19,9 @@ export default async function TasksPage() {
   const tags = await getTags();
   return (
     <div>
-      <div className="flex items-center justify-between pb-5">
-        <div>
-          <h1 className="text-4xl font-bold ">練習題目</h1>
-        </div>
-        <div className="flex items-center gap-2">
+      <div className="flex md:items-center md:flex-row flex-col justify-between pb-5">
+        <h1 className="text-4xl font-bold ">練習題目</h1>
+        <div className="flex items-center gap-2 md:py-0 pt-3">
           {userInfo.role === "expert" && (
             <>
               <Link href="/tasks/tags">
@@ -39,7 +37,11 @@ export default async function TasksPage() {
           )}
         </div>
       </div>
-      <TasksList tasksData={tasks.documents as any} assignments={assignments} allTags={tags} />
+      <TasksList
+        tasksData={tasks.documents as any}
+        assignments={assignments}
+        allTags={tags}
+      />
     </div>
   );
 }
