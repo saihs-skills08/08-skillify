@@ -28,22 +28,23 @@ interface BookPage {
 }
 
 interface TaskResult {
-  $id:string;
+  $id: string;
   input: string = "";
   output: string = "";
 }
 
-interface Task{
+interface Task {
   $id: string;
   title: string;
   info: string;
   creator: User;
   language: string;
   tasksResults: TaskResult[];
-  public:boolean;
+  public: boolean;
+  tags: Tag[];
 }
 
-interface User{
+interface User {
   $id: string;
   name: string;
   email: string;
@@ -51,11 +52,16 @@ interface User{
   role: "user" | "expert";
 }
 
-interface Assignment{
+interface Assignment {
   $id: string;
   $createdAt: string;
   content: string;
   tasks: Task;
   owner: User;
   done: boolean;
+}
+
+interface Tag {
+  $id: string;
+  name: string;
 }

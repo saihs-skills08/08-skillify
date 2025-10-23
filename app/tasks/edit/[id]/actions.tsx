@@ -10,6 +10,7 @@ export async function editTask(data: FormData, id: string) {
     language: data.get("language")?.valueOf(),
     tasksResults: results,
     public: data.get("public") === "on" ? true : false,
+    tags: JSON.parse(data.get("tags") as string),
   });
 }
 export async function getTaskById(taskId: string) {

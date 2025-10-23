@@ -3,6 +3,7 @@ import { getTaskById } from "./actions";
 import EditTaskPage from "./edit";
 import { getUserInfo } from "@/components/utils/getUserInfo";
 import PageNotFound from "@/components/page/404";
+import { getTags } from "../../tags/actions";
 
 export default async function EditPage({
   params,
@@ -16,6 +17,7 @@ export default async function EditPage({
   }
   const { id } = await params;
   const task = await getTaskById(id);
+  const tags = await getTags();
 
-  return <EditTaskPage task={task} />;
+  return <EditTaskPage task={task} allTags={tags} />;
 }

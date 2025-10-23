@@ -74,7 +74,18 @@ export default async function TaskInfoPage({
         <p className="text-gray-500 text-xs">由 {task.creator.name} 創建</p>
       </div>
       <div className="flex items-center justify-between my-4">
-        <h1 className="text-3xl font-bold">{task.title}</h1>
+        <div className="block">
+          <h1 className="text-3xl font-bold">{task.title}</h1>
+          <div className="flex gap-1 mt-2">
+            {task.tags.map((tag) => {
+              return (
+                <Badge key={tag.$id} variant="outline">
+                  {tag.name}
+                </Badge>
+              );
+            })}
+          </div>
+        </div>
         <div className="flex items-center gap-2">
           <Badge variant="secondary">{task.language}</Badge>
           <Dialog>

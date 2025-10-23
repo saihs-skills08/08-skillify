@@ -1,4 +1,5 @@
 "use client";
+
 import { useState } from "react";
 import { toast } from "sonner";
 import { editTask } from "./actions";
@@ -8,7 +9,14 @@ import ReactMarkdown from "react-markdown";
 import { Button } from "@/components/ui/button";
 import { ID } from "appwrite";
 import { Card } from "@/components/ui/card";
-import { BrushCleaning, CornerUpLeft, Trash } from "lucide-react";
+import {
+  BrushCleaning,
+  CornerUpLeft,
+  Delete,
+  Plus,
+  Trash,
+  X,
+} from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Switch } from "@/components/ui/switch";
 import { Label } from "@/components/ui/label";
@@ -36,13 +44,26 @@ import { taskComponents } from "@/mdx-components";
 import remarkGfm from "remark-gfm";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
+import {
+  DropdownMenu,
+  DropdownMenuTrigger,
+} from "@radix-ui/react-dropdown-menu";
+import { set } from "react-hook-form";
 
-export default function EditTaskPage({ task }: { task: Task }) {
+export default function EditTaskPage({
+  task,
+  allTags,
+}: {
+  task: Task;
+  allTags: Tag[];
+}) {
   const router = useRouter();
   const [taskResults, setTaskResults] = useState<TaskResult[]>(
-    task.tasksResults,
+    task.tasksResults
   );
   const [infoText, setInfoText] = useState<string>(task.info);
+  const [tags, setTags] = useState<Tag[]>(task.tags);
+  const [seletedTag, setSelectedTag] = useState<string>("");
 
   return (
     <div>
@@ -83,6 +104,72 @@ export default function EditTaskPage({ task }: { task: Task }) {
               <SelectItem value="Android">Android</SelectItem>
             </SelectContent>
           </Select>
+        </div>
+        <Input type="hidden" name="tags" value={JSON.stringify(tags)} />
+        <div>
+          <div className="flex justify-between items-center mb-2">
+            <p className=" font-bold text-lg">標籤</p>
+            <Button variant="link">
+              <Link href="/tasks/tags">編輯標籤</Link>
+            </Button>
+          </div>
+          <div className="flex gap-2">
+            {tags.map((tag) => (
+              <Badge key={tag.$id}>
+                {tag.name}
+                <button
+                  type="button"
+                  className="hover:opacity-50 duration-100 ml-1"
+                  onClick={() => {
+                    setTags(tags.filter((t) => t.$id !== tag.$id));
+                  }}
+                >
+                  <X size={15} />
+                </button>
+              </Badge>
+            ))}
+            <div className="flex gap-1">
+              <Select onValueChange={setSelectedTag}>
+                <SelectTrigger>
+                  <SelectValue placeholder="選擇標籤" />
+                </SelectTrigger>
+                <SelectContent>
+                  {allTags.map(
+                    (tag) =>
+                      tag.$id !== tags.find((t) => t.$id === tag.$id)?.$id && (
+                        <SelectItem
+                          key={tag.$id}
+                          value={tag.$id}
+                          onSelect={() => {
+                            if (!tags.find((t) => t.$id === tag.$id)) {
+                              setTags([...tags, tag]);
+                            }
+                          }}
+                        >
+                          {tag.name}
+                        </SelectItem>
+                      )
+                  )}
+                </SelectContent>
+              </Select>
+              <Button
+                type="button"
+                variant="outline"
+                className="border-dashed"
+                size="icon"
+                onClick={() => {
+                  const selectedTag: any = allTags.find(
+                    (tag) => tag.$id === seletedTag
+                  );
+                  if (!tags.find((t) => t.$id === selectedTag.$id)) {
+                    setTags([...tags, selectedTag!]);
+                  }
+                }}
+              >
+                <Plus />
+              </Button>
+            </div>
+          </div>
         </div>
         <div className="grid grid-cols-1 gap-4">
           <Textarea
@@ -134,7 +221,7 @@ export default function EditTaskPage({ task }: { task: Task }) {
                             size="icon"
                             onClick={() => {
                               setTaskResults(
-                                taskResults.filter((r) => r.$id !== result.$id),
+                                taskResults.filter((r) => r.$id !== result.$id)
                               );
                             }}
                             variant="destructive"
@@ -158,8 +245,8 @@ export default function EditTaskPage({ task }: { task: Task }) {
                           prev.map((r) =>
                             r.$id === result.$id
                               ? { ...r, input: x.target.value }
-                              : r,
-                          ),
+                              : r
+                          )
                         );
                       }}
                     />
@@ -173,8 +260,8 @@ export default function EditTaskPage({ task }: { task: Task }) {
                           prev.map((r) =>
                             r.$id === result.$id
                               ? { ...r, output: x.target.value }
-                              : r,
-                          ),
+                              : r
+                          )
                         );
                       }}
                     />
