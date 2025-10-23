@@ -88,44 +88,46 @@ export default async function TaskInfoPage({
         </div>
         <div className="flex items-center gap-2">
           <Badge variant="secondary">{task.language}</Badge>
-          <Dialog>
-            <Tooltip>
-              <TooltipTrigger asChild>
-                <DialogTrigger asChild>
-                  <Button
-                    variant="outline"
-                    size="icon"
-                    className={`${
-                      hasSubmitted
-                        ? currentTaskAssignments.done
-                          ? "border-green-300 bg-green-100"
-                          : "border-orange-300 bg-orange-100"
-                        : ""
-                    }`}
-                  >
-                    <Send />
-                  </Button>
-                </DialogTrigger>
-              </TooltipTrigger>
-              <TooltipContent>
-                {hasSubmitted ? "重新繳交作業" : "繳交作業"}
-              </TooltipContent>
-            </Tooltip>
-            <DialogContent>
-              <DialogHeader>
-                <DialogTitle>
+          {session?.user && (
+            <Dialog>
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <DialogTrigger asChild>
+                    <Button
+                      variant="outline"
+                      size="icon"
+                      className={`${
+                        hasSubmitted
+                          ? currentTaskAssignments.done
+                            ? "border-green-300 bg-green-100"
+                            : "border-orange-300 bg-orange-100"
+                          : ""
+                      }`}
+                    >
+                      <Send />
+                    </Button>
+                  </DialogTrigger>
+                </TooltipTrigger>
+                <TooltipContent>
                   {hasSubmitted ? "重新繳交作業" : "繳交作業"}
-                </DialogTitle>
-                <DialogDescription>
-                  請在下方的編輯器中貼上並提交你這個作業程式碼。
-                </DialogDescription>
-                <SubmitAssignment
-                  task={task}
-                  assignment={currentTaskAssignments || ({} as Assignment)}
-                />
-              </DialogHeader>
-            </DialogContent>
-          </Dialog>
+                </TooltipContent>
+              </Tooltip>
+              <DialogContent>
+                <DialogHeader>
+                  <DialogTitle>
+                    {hasSubmitted ? "重新繳交作業" : "繳交作業"}
+                  </DialogTitle>
+                  <DialogDescription>
+                    請在下方的編輯器中貼上並提交你這個作業程式碼。
+                  </DialogDescription>
+                  <SubmitAssignment
+                    task={task}
+                    assignment={currentTaskAssignments || ({} as Assignment)}
+                  />
+                </DialogHeader>
+              </DialogContent>
+            </Dialog>
+          )}
           {user.role === "expert" && (
             <DropdownMenu>
               <DropdownMenuTrigger asChild>

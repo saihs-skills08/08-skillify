@@ -64,7 +64,7 @@ export default function TasksList({
 
   return (
     <div>
-      <div className="flex pb-2 mb-1 overflow-x-auto">
+      <div className="flex pb-1 mb-1 overflow-x-auto">
         {allTags.map((tag) => (
           <button
             key={tag.$id}
@@ -109,7 +109,11 @@ export default function TasksList({
                       {!task.public && <Lock size={15} />}
                     </div>
                     <div className="flex flex-col gap-2">
-                      <div className={`flex flex-wrap gap-1 ${task.tags.length !== 0 ? "mt-1" : ""}`}>
+                      <div
+                        className={`flex flex-wrap gap-1 ${
+                          task.tags.length !== 0 ? "mt-1" : ""
+                        }`}
+                      >
                         {task.tags.map((tag) => (
                           <Badge key={tag.$id} variant="outline">
                             {tag.name}

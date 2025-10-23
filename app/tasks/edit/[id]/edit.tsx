@@ -44,11 +44,6 @@ import { taskComponents } from "@/mdx-components";
 import remarkGfm from "remark-gfm";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
-import {
-  DropdownMenu,
-  DropdownMenuTrigger,
-} from "@radix-ui/react-dropdown-menu";
-import { set } from "react-hook-form";
 
 export default function EditTaskPage({
   task,
@@ -113,7 +108,7 @@ export default function EditTaskPage({
               <Link href="/tasks/tags">編輯標籤</Link>
             </Button>
           </div>
-          <div className="flex gap-2">
+          <div className="flex gap-2 overflow-x-scroll">
             {tags.map((tag) => (
               <Badge key={tag.$id}>
                 {tag.name}
