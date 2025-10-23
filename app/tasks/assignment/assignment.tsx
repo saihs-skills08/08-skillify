@@ -53,7 +53,7 @@ export default function TaskAssignmentPage({
               assignment.done ? "border-green-500 border-" : ""
             }`}
           >
-            <div className="flex items-center justify-between mb-2">
+            <div className="flex justify-between mb-2 md:flex-row flex-col">
               <div>
                 <h2 className="text-xl font-bold">{assignment.owner.name}</h2>
                 <p className="text-xs text-gray-500">{assignment.$createdAt}</p>
