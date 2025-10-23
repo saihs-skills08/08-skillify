@@ -12,10 +12,8 @@ import { getUserInfo } from "@/components/utils/getUserInfo";
 import { taskComponents } from "@/mdx-components";
 import { CornerUpLeft, Edit, MoreVertical, Send, Trash } from "lucide-react";
 import { MDXRemote } from "next-mdx-remote-client/rsc";
-import { deleteTask, getAssignmentsByUserId } from "../actions";
+import { getAssignmentsByUserId } from "../actions";
 import Link from "next/link";
-import { redirect } from "next/navigation";
-import { toast } from "sonner";
 import { auth } from "@/auth";
 import SubmitAssignment from "./submit-assignment";
 import {
@@ -111,8 +109,7 @@ export default async function TaskInfoPage({
                   請在下方的編輯器中貼上並提交你這個作業程式碼。
                 </DialogDescription>
                 <SubmitAssignment
-                  language={task.language}
-                  taskId={task.$id}
+                  task={task}
                   assignment={currentTaskAssignments || ({} as Assignment)}
                 />
               </DialogHeader>

@@ -11,12 +11,10 @@ const MonacoEditor = dynamic(() => import("@monaco-editor/react"), {
 });
 
 export default function SubmitAssignment({
-  language,
-  taskId,
+  task,
   assignment,
 }: {
-  language: string;
-  taskId: string;
+  task: Task;
   assignment: Assignment;
 }) {
   const [code, setCode] = useState(assignment.content || "");
@@ -24,7 +22,7 @@ export default function SubmitAssignment({
     <>
       <MonacoEditor
         height="400px"
-        defaultLanguage={language}
+        defaultLanguage={task.language}
         defaultValue={code}
         onChange={(x) => {
           setCode(x as any);
@@ -34,7 +32,7 @@ export default function SubmitAssignment({
         <Button
           className="mt-4"
           onClick={() => {
-            toast.promise(submitAssignment(taskId, code), {
+            toast.promise(submitAssignment(task, code), {
               loading: "繳交作業中...",
               success: "作業繳交成功！",
               error: "作業繳交失敗，請再試一次。",
