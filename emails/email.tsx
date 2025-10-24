@@ -6,6 +6,8 @@ import {
   Text,
   CodeBlock,
   dracula,
+  Img,
+  Container,
 } from "@react-email/components";
 export default function EmailTemplate({
   name = "貓貓",
@@ -24,21 +26,29 @@ export default function EmailTemplate({
   return (
     <Tailwind>
       <Html lang="zh-tw">
-        <Heading>{name}繳交了一份作業</Heading>
-        <Text>來自題目：{title}</Text>
-        <CodeBlock
-          code={content}
-          lineNumbers
-          theme={dracula}
-          language={language as any}
-          style={{ fontFamily: "monospace" }}
+        <Img
+          src="https://08-skillify.eliaschen.dev/worldskills-logo.png"
+          alt="WorldSkills Logo"
+          height="50"
+          width="50"
         />
-        <Button
-          href="https://08-skillify.eliaschen.dev/tasks/assignment"
-          className="px-3 py-2 bg-green-400 rounded-xl text-black font-bold mt-5"
-        >
-          前往Skillify查看作業
-        </Button>
+        <Container>
+          <Heading>{name}繳交了一份作業</Heading>
+          <Text>來自題目：{title}</Text>
+          <CodeBlock
+            code={content}
+            lineNumbers
+            theme={dracula}
+            language={language as any}
+            style={{ fontFamily: "monospace" }}
+          />
+          <Button
+            href="https://08-skillify.eliaschen.dev/tasks/assignment"
+            className="px-3 py-2 bg-green-400 rounded-xl text-black font-bold mt-5"
+          >
+            前往Skillify查看作業
+          </Button>
+        </Container>
       </Html>
     </Tailwind>
   );
