@@ -1,22 +1,19 @@
 "use client";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
-import { Textarea } from "@/components/ui/textarea";
-import { submitNewTask } from "./actions";
+
 import { useState } from "react";
-import { Card } from "@/components/ui/card";
+import { toast } from "sonner";
+import { editTask } from "@/app/tasks/edit/[id]/actions";
+import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
+import ReactMarkdown from "react-markdown";
+import { Button } from "@/components/ui/button";
 import { ID } from "appwrite";
-import { Label } from "@/components/ui/label";
+import { Card } from "@/components/ui/card";
+import { BrushCleaning, CornerUpLeft, Plus, Trash, X } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
+import { Switch } from "@/components/ui/switch";
+import { Label } from "@/components/ui/label";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import { BrushCleaning, CornerUpLeft, Trash } from "lucide-react";
 import {
   Empty,
   EmptyDescription,
@@ -26,48 +23,82 @@ import {
 } from "@/components/ui/empty";
 import {
   Tooltip,
-  TooltipTrigger,
   TooltipContent,
+  TooltipTrigger,
 } from "@/components/ui/tooltip";
-import { useRouter } from "next/navigation";
-import { toast } from "sonner";
-import ReactMarkdown from "react-markdown";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { taskComponents } from "@/mdx-components";
 import remarkGfm from "remark-gfm";
-import { Switch } from "@/components/ui/switch";
+import { useRouter } from "next/navigation";
 import Link from "next/link";
+import { submitNewTask } from "@/app/tasks/new/actions";
 
-export default function CreateNewTasks() {
+export default function TaskEdit({
+  task,
+  allTags,
+}: {
+  task?: Task | null;
+  allTags: Tag[];
+}) {
   const router = useRouter();
-  const [taskResults, setTaskResults] = useState<TaskResult[]>([]);
-  const [infoText, setInfoText] = useState<string>("");
+  const [taskResults, setTaskResults] = useState<TaskResult[]>(
+    task ? task.tasksResults : [],
+  );
+  const [infoText, setInfoText] = useState<string>(task ? task.info : "");
+  const [tags, setTags] = useState<Tag[]>(task ? task.tags : []);
+  const [seletedTag, setSelectedTag] = useState<string>("");
 
   return (
     <div>
       <Link href="/tasks">
         <Button variant="ghost" className="mb-2">
           <CornerUpLeft />
-          <span>返回</span>
+          <span>取消</span>
         </Button>
       </Link>
-
-      <h1 className="text-4xl font-bold">建立題目</h1>
+      <h1 className="text-4xl font-bold">{task ? "編輯" : "建立"}題目</h1>
       <form
         className="mt-5 flex flex-col gap-4"
         action={async (data) => {
-          toast.promise(submitNewTask(data), {
-            loading: "題目建立中...",
-            success: () => {
-              router.push("/tasks");
-              return "題目建立成功！";
-            },
-            error: "題目建立失敗，請稍後再試！",
-          });
+          if (task) {
+            toast.promise(editTask(data, task.$id), {
+              loading: "套用變更中...",
+              success: () => {
+                router.push(`/tasks/${task.$id}`);
+                return "變更套用成功！";
+              },
+              error: "變更套用失敗，請稍後再試！",
+            });
+          } else {
+            toast.promise(submitNewTask(data), {
+              loading: "題目建立中...",
+              success: () => {
+                router.push("/tasks");
+                return "題目建立成功！";
+              },
+              error: "題目建立失敗，請稍後再試！",
+            });
+          }
         }}
       >
         <div className="flex gap-4">
-          <Input placeholder="標題" name="title" required />
-          <Select name="language" required defaultValue="java">
+          <Input
+            placeholder="標題"
+            name="title"
+            required
+            defaultValue={task?.title}
+          />
+          <Select
+            name="language"
+            required
+            defaultValue={task?.language ?? "java"}
+          >
             <SelectTrigger>
               <SelectValue placeholder="平台" />
             </SelectTrigger>
@@ -78,12 +109,83 @@ export default function CreateNewTasks() {
             </SelectContent>
           </Select>
         </div>
+        <Input
+          type="hidden"
+          name="tags"
+          value={JSON.stringify(tags.map((tag: Tag) => tag.$id))}
+        />
+        <div>
+          <div className="flex justify-between items-center mb-2">
+            <p className=" font-bold text-lg">標籤</p>
+            <Button variant="link">
+              <Link href="/tasks/tags">編輯標籤</Link>
+            </Button>
+          </div>
+          <div className="flex gap-2 overflow-x-auto pb-2">
+            {tags.map((tag) => (
+              <Badge key={tag.$id}>
+                {tag.name}
+                <button
+                  type="button"
+                  className="hover:opacity-50 duration-100 ml-1"
+                  onClick={() => {
+                    setTags(tags.filter((t) => t.$id !== tag.$id));
+                  }}
+                >
+                  <X size={15} />
+                </button>
+              </Badge>
+            ))}
+            <div className="flex gap-1">
+              <Select onValueChange={setSelectedTag}>
+                <SelectTrigger>
+                  <SelectValue placeholder="選擇標籤" />
+                </SelectTrigger>
+                <SelectContent>
+                  {allTags.map(
+                    (tag) =>
+                      tag.$id !== tags.find((t) => t.$id === tag.$id)?.$id && (
+                        <SelectItem
+                          key={tag.$id}
+                          value={tag.$id}
+                          onSelect={() => {
+                            if (!tags.find((t) => t.$id === tag.$id)) {
+                              setTags([...tags, tag]);
+                            }
+                          }}
+                        >
+                          {tag.name}
+                        </SelectItem>
+                      ),
+                  )}
+                </SelectContent>
+              </Select>
+              <Button
+                type="button"
+                variant="outline"
+                className="border-dashed"
+                size="icon"
+                onClick={() => {
+                  const selectedTag: any = allTags.find(
+                    (tag) => tag.$id === seletedTag,
+                  );
+                  if (!tags.find((t) => t.$id === selectedTag.$id)) {
+                    setTags([...tags, selectedTag!]);
+                  }
+                }}
+              >
+                <Plus />
+              </Button>
+            </div>
+          </div>
+        </div>
         <div className="grid grid-cols-1 gap-4">
           <Textarea
             placeholder="內容"
             name="info"
             required
             onChange={(x) => setInfoText(x.target.value)}
+            defaultValue={task?.info}
           />
           <div className="border rounded-lg p-4">
             <ReactMarkdown
@@ -127,7 +229,7 @@ export default function CreateNewTasks() {
                             size="icon"
                             onClick={() => {
                               setTaskResults(
-                                taskResults.filter((r) => r.$id !== result.$id)
+                                taskResults.filter((r) => r.$id !== result.$id),
                               );
                             }}
                             variant="destructive"
@@ -145,13 +247,14 @@ export default function CreateNewTasks() {
                     <Textarea
                       placeholder="輸入範例"
                       id="input"
+                      defaultValue={result.input}
                       onChange={(x) => {
                         setTaskResults((prev) =>
                           prev.map((r) =>
                             r.$id === result.$id
                               ? { ...r, input: x.target.value }
-                              : r
-                          )
+                              : r,
+                          ),
                         );
                       }}
                     />
@@ -159,13 +262,14 @@ export default function CreateNewTasks() {
                     <Textarea
                       placeholder="輸出範例"
                       id="output"
+                      defaultValue={result.output}
                       onChange={(x) => {
                         setTaskResults((prev) =>
                           prev.map((r) =>
                             r.$id === result.$id
                               ? { ...r, output: x.target.value }
-                              : r
-                          )
+                              : r,
+                          ),
                         );
                       }}
                     />
@@ -194,10 +298,10 @@ export default function CreateNewTasks() {
         />
         <div className="flex items-center gap-2">
           <Label htmlFor="public">公開</Label>
-          <Switch name="public" defaultChecked={true} />
+          <Switch name="public" defaultChecked={task?.public ?? true} />
         </div>
         <Button type="submit" className="mt-5">
-          建立
+          {task ? "變更" : "建立"}
         </Button>
       </form>
     </div>

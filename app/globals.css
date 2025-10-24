@@ -13,6 +13,19 @@ html {
 
 @custom-variant dark (&:is(.dark *));
 
+@theme {
+  --animate-fade: ballFade 2s ease-in both;
+
+  @keyframes ballFade {
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 50%;
+    }
+  }
+}
+
 @theme inline {
   --radius-sm: calc(var(--radius) - 4px);
   --radius-md: calc(var(--radius) - 2px);

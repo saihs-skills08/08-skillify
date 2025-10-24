@@ -1,7 +1,8 @@
 import { auth } from "@/auth";
-import CreateNewTasks from "./create-new-tasks";
 import PageNotFound from "@/components/page/404";
 import { getUserInfo } from "@/components/utils/getUserInfo";
+import TaskEdit from "@/components/page/task-edit";
+import { getTags } from "../tags/actions";
 
 export default async function CreateNewTaskPage() {
   const session = await auth();
@@ -9,5 +10,6 @@ export default async function CreateNewTaskPage() {
   if (user.role !== "expert") {
     return PageNotFound();
   }
-  return <CreateNewTasks />;
+  const tags = await getTags();
+  return <TaskEdit task={null} allTags={tags} />;
 }
