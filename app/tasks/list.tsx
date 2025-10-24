@@ -1,6 +1,5 @@
 "use client";
 
-import { client } from "@/appwrite";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import {
@@ -41,25 +40,25 @@ export default function TasksList({
         setUserInfo(info);
       }
     });
-    const realtime = client.subscribe(
-      "databases.db.collections.tasks.documents",
-      (response) => {
-        console.log(response.payload);
-        toast.promise(
-          fetchTasks(userInfo!).then((newTasks) => {
-            setTasks(newTasks);
-          }),
-          {
-            success: "題目列表已更新！",
-            loading: "更新題目列表中...",
-            error: "更新題目列表失敗！",
-          },
-        );
-      },
-    );
-    return () => {
-      realtime();
-    };
+    // const realtime = client.subscribe(
+    //   "databases.db.collections.tasks.documents",
+    //   (response) => {
+    //     console.log(response.payload);
+    //     toast.promise(
+    //       fetchTasks(userInfo!).then((newTasks) => {
+    //         setTasks(newTasks);
+    //       }),
+    //       {
+    //         success: "題目列表已更新！",
+    //         loading: "更新題目列表中...",
+    //         error: "更新題目列表失敗！",
+    //       },
+    //     );
+    //   },
+    // );
+    // return () => {
+    //   realtime();
+    // };
   }, []);
 
   const [filterTag, setFilterTag] = useState<Tag[]>([]);
@@ -160,7 +159,12 @@ export default function TasksList({
                           <DropdownMenuItem
                             onClick={() => {
                               if (confirm("確定要刪除此題目嗎？")) {
-                                deleteTask(task.$id);
+                                deleteTask(task.$id).then(() => {
+                                  toast.success("題目刪除成功！");
+                                  fetchTasks(userInfo).then((newTasks) => {
+                                    setTasks(newTasks);
+                                  });
+                                });
                               }
                             }}
                           >

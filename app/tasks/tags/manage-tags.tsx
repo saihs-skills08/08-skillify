@@ -35,13 +35,13 @@ export default function ManageTags({ originalTags }: { originalTags: Tag[] }) {
                       formData.append("name", newName);
                       toast.promise(
                         updateTag(tag.$id, formData).then(() =>
-                          getTags().then(setTags)
+                          getTags().then(setTags),
                         ),
                         {
                           loading: "正在更新標籤...",
                           success: "標籤更新成功!",
                           error: "標籤更新失敗!",
-                        }
+                        },
                       );
                     }
                   }}
@@ -57,7 +57,7 @@ export default function ManageTags({ originalTags }: { originalTags: Tag[] }) {
                         loading: "正在刪除標籤...",
                         success: "標籤刪除成功!",
                         error: "標籤刪除失敗!",
-                      })
+                      }),
                     )
                   }
                 >
@@ -77,7 +77,7 @@ export default function ManageTags({ originalTags }: { originalTags: Tag[] }) {
               loading: "正在新增標籤...",
               success: "標籤新增成功!",
               error: "標籤新增失敗!",
-            }
+            },
           );
         }}
         className="mt-5"

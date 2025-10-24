@@ -23,10 +23,12 @@ export function DeleteProject({
   projectId,
   isOpen,
   setOpen,
+  triggerUpdate,
 }: {
   projectId: string;
   isOpen: boolean;
   setOpen: (open: boolean) => void;
+  triggerUpdate: (update: Promise<any>) => void;
 }) {
   return (
     <Dialog open={isOpen} onOpenChange={setOpen}>
@@ -39,8 +41,9 @@ export function DeleteProject({
           <DialogFooter>
             <Button
               onClick={async () => {
-                await deleteProject(projectId);
-                setOpen(false);
+                triggerUpdate(
+                  deleteProject(projectId).then(() => setOpen(false)),
+                );
               }}
               className="bg-red-500 hover:bg-red-600"
             >
@@ -57,10 +60,12 @@ export function EditProject({
   project,
   isOpen,
   setOpen,
+  triggerUpdate,
 }: {
   project: Project;
   isOpen: boolean;
   setOpen: (open: boolean) => void;
+  triggerUpdate: (promise: Promise<any>) => void;
 }) {
   return (
     <Dialog open={isOpen} onOpenChange={setOpen}>
@@ -70,15 +75,18 @@ export function EditProject({
           <DialogDescription>修改專案名稱</DialogDescription>
           <form
             action={async (data: FormData) => {
-              const newName = data.get("projectName")?.valueOf();
-              const newFileName = data.get("fileName")?.valueOf();
-              const newLanguage = data.get("language")?.valueOf();
-              await renameProject(project.$id, {
-                name: newName,
-                filename: newFileName,
-                language: newLanguage,
-              } as Project);
-              setOpen(false);
+              async function editProject() {
+                const newName = data.get("projectName")?.valueOf();
+                const newFileName = data.get("fileName")?.valueOf();
+                const newLanguage = data.get("language")?.valueOf();
+                await renameProject(project.$id, {
+                  name: newName,
+                  filename: newFileName,
+                  language: newLanguage,
+                } as Project);
+                setOpen(false);
+              }
+              triggerUpdate(editProject());
             }}
             className="flex flex-col gap-2 mt-2"
           >

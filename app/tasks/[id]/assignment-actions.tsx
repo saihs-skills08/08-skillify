@@ -23,7 +23,7 @@ export async function submitAssignment(task: Task, content: string) {
       const resend = new Resend(process.env.NEXT_PUBLIC_RESEND_API_KEY);
       const { data, error } = await resend.emails.send({
         from: "Skillify Notification <skillify@mail.eliaschen.dev>",
-        to: ["eliaschen.dev@gmail.com", "sofia0627sofia@gmail.com"],
+        to: ["eliaschen.dev@gmail.com" /* "sofia0627sofia@gmail.com" */],
         subject: `${session?.user?.name || "未知使用者"} 繳交了一份作業`,
         react: (
           <EmailTemplate

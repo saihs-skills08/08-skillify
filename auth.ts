@@ -1,7 +1,6 @@
 import NextAuth from "next-auth";
 import Google from "next-auth/providers/google";
 import { db } from "./appwrite";
-import { toast } from "sonner";
 
 export const { handlers, signIn, signOut, auth } = NextAuth({
   providers: [Google],

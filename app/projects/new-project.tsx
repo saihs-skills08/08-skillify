@@ -28,6 +28,7 @@ export default function NewProjectDialog() {
     const res = await submitForm(e);
     if (res) {
       setOpen(false);
+      window.location.reload();
     }
   };
   return (

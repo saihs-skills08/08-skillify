@@ -21,6 +21,7 @@ import {
   InputGroupAddon,
   InputGroupInput,
 } from "@/components/ui/input-group";
+import { toast } from "sonner";
 
 export default function ProjectList({
   className,
@@ -40,22 +41,8 @@ export default function ProjectList({
   const [searchText, setSearchText] = useState<string>("");
 
   useEffect(() => {
-    const unsubscribe = client.subscribe(["documents"], (response) => {
-      if (
-        response.channels.includes(
-          "databases.db.collections.projects.documents",
-        )
-      ) {
-        getUserProjects().then((projects) => {
-          setProjects(projects);
-          setIsEmpty(projects.length === 0);
-        });
-      }
-    });
-    return () => {
-      unsubscribe();
-    };
-  }, []);
+    setIsEmpty(projects.length === 0);
+  }, [projects]);
 
   return (
     <>
@@ -130,11 +117,39 @@ export default function ProjectList({
                   projectId={project.$id}
                   isOpen={showDeleteProject == project.$id}
                   setOpen={(x) => setShowDeleteProject(x ? project.$id : null)}
+                  triggerUpdate={async (promise) => {
+                    toast.promise(
+                      promise.then(() =>
+                        getUserProjects().then((projects) => {
+                          setProjects(projects);
+                        }),
+                      ),
+                      {
+                        loading: "更新專案列表中...",
+                        success: "專案列表更新成功!",
+                        error: "專案列表更新失敗!",
+                      },
+                    );
+                  }}
                 />
                 <EditProject
                   project={project}
                   isOpen={showRenameProject == project.$id}
                   setOpen={(x) => setShowRenameProject(x ? project.$id : null)}
+                  triggerUpdate={async (promise) => {
+                    toast.promise(
+                      promise.then(() => {
+                        getUserProjects().then((projects) => {
+                          setProjects(projects);
+                        });
+                      }),
+                      {
+                        loading: "更新專案列表中...",
+                        success: "專案列表更新成功!",
+                        error: "專案列表更新失敗!",
+                      },
+                    );
+                  }}
                 />
               </div>
             ),

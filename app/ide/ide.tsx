@@ -43,25 +43,10 @@ export default function Ide({
   const navbarRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    const unsubscribe = client.subscribe(["documents"], (response) => {
-      if (
-        response.events.includes(
-          `databases.db.collections.projects.documents.${project.$id}.update`,
-        )
-      ) {
-        getProjectInfo(projectId).then((project) => {
-          setProject(project);
-        });
-      }
-    });
-    return () => {
-      unsubscribe();
-    };
-  }, []);
-
-  useEffect(() => {
     const handler = setTimeout(() => {
-      updateProjectContent(projectId, code).then(() => {});
+      updateProjectContent(projectId, code).then(() => {
+        setIsBackup(true);
+      });
     }, 1000);
     return () => {
       clearTimeout(handler);
@@ -154,6 +139,13 @@ export default function Ide({
         project={project}
         isOpen={showEditProject}
         setOpen={setShowEditProject}
+        triggerUpdate={async (promise) => {
+          promise.then(() => {
+            getProjectInfo(projectId).then((project) => {
+              setProject(project);
+            });
+          });
+        }}
       />
       <div className="block" style={{ height: "calc(100vh - 70px)" }}>
         <div className="flex items-center justify-between" ref={navbarRef}>

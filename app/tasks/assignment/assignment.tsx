@@ -20,22 +20,22 @@ export default function TaskAssignmentPage({
 }) {
   const [assignments, setAssignments] =
     useState<Assignment[]>(originalAssignment);
-  useEffect(() => {
-    const realtime = client.subscribe(["documents"], (response) => {
-      if (
-        response.channels.includes(
-          "databases.db.collections.assignment.documents"
-        )
-      ) {
-        getAssignment().then((data) => {
-          setAssignments(data);
-        });
-      }
-    });
-    return () => {
-      realtime();
-    };
-  }, []);
+  // useEffect(() => {
+  //   const realtime = client.subscribe(["documents"], (response) => {
+  //     if (
+  //       response.channels.includes(
+  //         "databases.db.collections.assignment.documents"
+  //       )
+  //     ) {
+  //       getAssignment().then((data) => {
+  //         setAssignments(data);
+  //       });
+  //     }
+  //   });
+  //   return () => {
+  //     realtime();
+  //   };
+  // }, []);
   return (
     <div>
       <Link href="/tasks">
@@ -71,17 +71,21 @@ export default function TaskAssignmentPage({
                 <Button
                   onClick={() => {
                     toast.promise(
-                      () => {
+                      async () => {
                         return markAssignmentDone(
                           assignment.$id,
-                          !assignment.done
-                        );
+                          !assignment.done,
+                        ).then(() => {
+                          getAssignment().then((data) => {
+                            setAssignments(data);
+                          });
+                        });
                       },
                       {
                         loading: "套用變更中...",
                         success: "完成",
                         error: "操作失敗，請稍後再試",
-                      }
+                      },
                     );
                   }}
                 >
@@ -94,14 +98,18 @@ export default function TaskAssignmentPage({
                   onClick={() => {
                     if (confirm("確定要刪除這筆作業嗎？")) {
                       toast.promise(
-                        () => {
-                          return deleteAssignment(assignment.$id);
+                        async () => {
+                          return deleteAssignment(assignment.$id).then(() => {
+                            getAssignment().then((data) => {
+                              setAssignments(data);
+                            });
+                          });
                         },
                         {
                           loading: "刪除中...",
                           success: "刪除成功！",
                           error: "刪除失敗，請再試一次。",
-                        }
+                        },
                       );
                     }
                   }}
