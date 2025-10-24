@@ -51,7 +51,7 @@ export default function TasksList({
             success: "題目列表已更新！",
             loading: "更新題目列表中...",
             error: "更新題目列表失敗！",
-          }
+          },
         );
       }
     });
@@ -95,7 +95,7 @@ export default function TasksList({
             if (
               filterTag.length > 0 &&
               !filterTag.every((tag) =>
-                task.tags.find((t) => t.$id === tag.$id)
+                task.tags.find((t) => t.$id === tag.$id),
               )
             ) {
               return null;

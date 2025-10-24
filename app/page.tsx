@@ -8,8 +8,6 @@ export default async function Home() {
   return (
     <>
       <div className="p-5 fade-in block fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 ">
-        <div className="w-100 h-100 rounded-full bg-gradient-to-br from-green-500 to-green-200 absolute blur-[100px] animate-fade z-1"></div>
-        <div className="w-100 h-100 rounded-full bg-gradient-to-tl from-green-500 to-green-100 absolute blur-[100px] opacity-50 top-[-5rem] left-[-20rem] animate-fade z-1"></div>
         <div className="flex flex-col items-end">
           <Image
             src="/worldskills-logo.svg"
@@ -39,7 +37,7 @@ export default async function Home() {
                 "use server";
                 await signIn("google");
               }}
-              className="w-full"
+              className="w-full z-20"
               variant="outline"
             >
               <User />
@@ -47,6 +45,8 @@ export default async function Home() {
             </Button>
           )}
         </div>
+        <div className="w-100 h-100 top-0 rounded-full bg-gradient-to-br from-green-500 to-green-200 absolute blur-[100px] animate-fade z-1"></div>
+        <div className="w-100 h-100 rounded-full bg-gradient-to-tl from-green-500 to-green-100 absolute blur-[100px] opacity-50 top-[-5rem] left-[-20rem] animate-fade z-1"></div>
       </div>
     </>
   );
