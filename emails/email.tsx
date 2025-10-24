@@ -26,13 +26,13 @@ export default function EmailTemplate({
   return (
     <Tailwind>
       <Html lang="zh-tw">
-        <Img
-          src="https://08-skillify.eliaschen.dev/worldskills-logo.png"
-          alt="WorldSkills Logo"
-          height="50"
-          width="50"
-        />
         <Container>
+          <Img
+            src="https://08-skillify.eliaschen.dev/worldskills-logo.png"
+            alt="WorldSkills Logo"
+            height="50"
+            width="50"
+          />
           <Heading>{name}繳交了一份作業</Heading>
           <Text>來自題目：{title}</Text>
           <CodeBlock
