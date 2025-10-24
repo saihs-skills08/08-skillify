@@ -37,12 +37,14 @@ export default function TasksList({
 
   useEffect(() => {
     getUserInfo().then((info) => {
-      setUserInfo(info);
+      if (info) {
+        setUserInfo(info);
+      }
     });
-    const realtime = client.subscribe(["documents"], (response) => {
-      if (
-        response.channels.includes(`databases.db.collections.tasks.documents`)
-      ) {
+    const realtime = client.subscribe(
+      "databases.db.collections.tasks.documents",
+      (response) => {
+        console.log(response.payload);
         toast.promise(
           fetchTasks(userInfo!).then((newTasks) => {
             setTasks(newTasks);
@@ -53,8 +55,8 @@ export default function TasksList({
             error: "更新題目列表失敗！",
           },
         );
-      }
-    });
+      },
+    );
     return () => {
       realtime();
     };

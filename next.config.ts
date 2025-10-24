@@ -7,7 +7,7 @@ const nextConfig: NextConfig = {
   images: {
     remotePatterns: [new URL("https://lh3.googleusercontent.com/**")],
   },
-  experimental: { mdxRs: true },
+  experimental: { mdxRs: true, useCache: true },
 };
 
 const withMDX = createMDX({
