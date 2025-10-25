@@ -14,7 +14,7 @@ import { Eye } from "lucide-react";
 
 export default function SampleCode({ task }: { task: Task }) {
   return (
-    <div className="flex gap-2 items-center md:flex-row flex-col justify-center my-2">
+    <div className="flex gap-2 items-center md:flex-row flex-col justify-center">
       <p>真的沒想法？ 參考一下範例程式</p>
       <Dialog>
         <DialogTrigger asChild>

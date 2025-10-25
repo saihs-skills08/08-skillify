@@ -186,10 +186,10 @@ export default async function TaskInfoPage({
             \`\`\`${task.language}
             ${result.output}
             \`\`\`
-            ---
             `
                 : ""
             }
+            ---
             `;
 
           return (
@@ -199,7 +199,7 @@ export default async function TaskInfoPage({
           );
         })}
       </div>
-      <div>
+      <div className="my-8">
         <SampleCode task={task} />
       </div>
     </section>
