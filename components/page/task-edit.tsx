@@ -9,7 +9,14 @@ import ReactMarkdown from "react-markdown";
 import { Button } from "@/components/ui/button";
 import { ID } from "appwrite";
 import { Card } from "@/components/ui/card";
-import { BrushCleaning, CornerUpLeft, Plus, Trash, X } from "lucide-react";
+import {
+  BrushCleaning,
+  CornerUpLeft,
+  Plus,
+  Trash,
+  WandSparkles,
+  X,
+} from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Switch } from "@/components/ui/switch";
 import { Label } from "@/components/ui/label";
@@ -306,13 +313,38 @@ export default function TaskEdit({
           </ul>
         </ScrollArea>
         <div>
-          <p className="font-bold text-xl">範例程式碼</p>
+          <div className="flex items-center justify-between">
+            <p className="font-bold text-xl">範例程式碼</p>
+            <Button
+              onClick={async () => {
+                const code = await fetch(
+                  `${process.env.NODE_ENV == "development" ? "http" : "https"}://${process.env.NEXT_PUBLIC_BACKEND_HOST}/format/${language === "java" ? "java" : "kt"}`,
+                  {
+                    method: "POST",
+                    body: sample,
+                  },
+                );
+                if (code.ok) {
+                  const formatted = await code.text();
+                  setSample(formatted);
+                  toast.success("格式化成功！");
+                } else {
+                  toast.error("格式化失敗，請稍後再試！");
+                }
+              }}
+              type="button"
+            >
+              <WandSparkles />
+              格式化
+            </Button>
+          </div>
           <Input type="hidden" name="sample" value={sample} />
           <div className="mt-2 p-1 border rounded-lg">
             <MonacoEditor
               height="200px"
               defaultLanguage={language ?? "plaintext"}
               defaultValue={sample}
+              value={sample}
               onChange={(code) => {
                 setSample(code || "");
               }}

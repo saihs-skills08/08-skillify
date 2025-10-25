@@ -33,7 +33,7 @@ export default function SampleCode({ task }: { task: Task }) {
           <CodeBlock
             code={task.sample || "// 本題目尚未提供範例程式碼"}
             language={task.language}
-            showLineNumbers={false}
+            showLineNumbers={true}
           />
         </DialogContent>
       </Dialog>
