@@ -38,6 +38,13 @@ import remarkGfm from "remark-gfm";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { submitNewTask } from "@/app/tasks/new/actions";
+import dynamic from "next/dynamic";
+
+const MonacoEditor = dynamic(() => import("@monaco-editor/react"), {
+  ssr: false,
+});
+
+type Language = "java" | "kotlin" | "android";
 
 export default function TaskEdit({
   task,
@@ -52,7 +59,11 @@ export default function TaskEdit({
   );
   const [infoText, setInfoText] = useState<string>(task ? task.info : "");
   const [tags, setTags] = useState<Tag[]>(task ? task.tags : []);
+  const [sample, setSample] = useState<string>(task ? task.sample || "" : "");
   const [seletedTag, setSelectedTag] = useState<string>("");
+  const [language, setLanguage] = useState<Language>(
+    task ? (task.language as Language) : "java",
+  );
 
   return (
     <div>
@@ -97,7 +108,9 @@ export default function TaskEdit({
           <Select
             name="language"
             required
-            defaultValue={task?.language ?? "java"}
+            defaultValue={language}
+            onValueChange={(value: Language) => setLanguage(value)}
+            value={language}
           >
             <SelectTrigger>
               <SelectValue placeholder="平台" />
@@ -186,8 +199,9 @@ export default function TaskEdit({
             required
             onChange={(x) => setInfoText(x.target.value)}
             defaultValue={task?.info}
+            className="h-30"
           />
-          <div className="border rounded-lg p-4">
+          <div className="border rounded-lg p-4 overflow-y-auto">
             <ReactMarkdown
               components={taskComponents as any}
               remarkPlugins={[remarkGfm]}
@@ -291,6 +305,20 @@ export default function TaskEdit({
             )}
           </ul>
         </ScrollArea>
+        <div>
+          <p className="font-bold text-xl">範例程式碼</p>
+          <Input type="hidden" name="sample" value={sample} />
+          <div className="mt-2 p-1 border rounded-lg">
+            <MonacoEditor
+              height="200px"
+              defaultLanguage={language ?? "plaintext"}
+              defaultValue={sample}
+              onChange={(code) => {
+                setSample(code || "");
+              }}
+            />
+          </div>
+        </div>
         <input
           type="hidden"
           name="taskResults"

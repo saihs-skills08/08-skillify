@@ -14,5 +14,6 @@ export async function submitNewTask(data: FormData) {
     tasksResults: results,
     public: data.get("public") === "on" ? true : false,
     tags: JSON.parse(data.get("tags") as string),
+    sample: data.get("sample")?.valueOf(),
   });
 }

@@ -12,6 +12,7 @@ export async function editTask(data: FormData, id: string) {
     tasksResults: results,
     public: data.get("public") === "on" ? true : false,
     tags: JSON.parse(data.get("tags") as string),
+    sample: data.get("sample")?.valueOf(),
   });
 }
 export async function getTaskById(taskId: string) {

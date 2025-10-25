@@ -42,6 +42,7 @@ interface Task {
   tasksResults: TaskResult[];
   public: boolean;
   tags: Tag[];
+  sample: string;
 }
 
 interface User {

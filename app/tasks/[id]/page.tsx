@@ -29,6 +29,7 @@ import {
   TooltipContent,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
+import SampleCode from "./sample-code";
 
 export async function generateMetadata({
   params,
@@ -54,7 +55,7 @@ export default async function TaskInfoPage({
   const user = await getUserInfo(session?.user?.id || "");
   const allAssignments = await getAssignmentsByUserId(session?.user?.id || "");
   const currentTaskAssignments = allAssignments.findLast(
-    (assignment) => assignment.tasks.$id === task.$id
+    (assignment) => assignment.tasks.$id === task.$id,
   );
   const hasSubmitted = !!currentTaskAssignments;
 
@@ -172,7 +173,7 @@ export default async function TaskInfoPage({
             ${
               result.input != ""
                 ? `
-            \`\`\`java
+            \`\`\`${task.language}
             ${result.input}
             \`\`\`
             `
@@ -182,7 +183,7 @@ export default async function TaskInfoPage({
             ${
               result.output != ""
                 ? `
-            \`\`\`java
+            \`\`\`${task.language}
             ${result.output}
             \`\`\`
             ---
@@ -198,7 +199,9 @@ export default async function TaskInfoPage({
           );
         })}
       </div>
-      <div></div>
+      <div>
+        <SampleCode task={task} />
+      </div>
     </section>
   );
 }
