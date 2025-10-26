@@ -12,6 +12,7 @@ import {
   Check,
   Edit,
   Eye,
+  FileCode2,
   Lock,
   MoreVertical,
   Search,
@@ -30,6 +31,11 @@ import {
   InputGroupAddon,
   InputGroupInput,
 } from "@/components/ui/input-group";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 
 async function fetchTasks(userInfo: User) {
   const tasks = await getAllTasks(userInfo);
@@ -56,25 +62,6 @@ export default function TasksList({
         setUserInfo(info);
       }
     });
-    // const realtime = client.subscribe(
-    //   "databases.db.collections.tasks.documents",
-    //   (response) => {
-    //     console.log(response.payload);
-    //     toast.promise(
-    //       fetchTasks(userInfo!).then((newTasks) => {
-    //         setTasks(newTasks);
-    //       }),
-    //       {
-    //         success: "題目列表已更新！",
-    //         loading: "更新題目列表中...",
-    //         error: "更新題目列表失敗！",
-    //       },
-    //     );
-    //   },
-    // );
-    // return () => {
-    //   realtime();
-    // };
   }, []);
 
   const [filterTag, setFilterTag] = useState<Tag[]>([]);
@@ -175,16 +162,20 @@ export default function TasksList({
                       ) : null}
                     </div>
                   </Link>
-                  <div className="flex items-center">
+                  <div className="flex items-center gap-2">
+                    {task.sample && (
+                      <Tooltip>
+                        <TooltipTrigger>
+                          <FileCode2 size={15} />
+                        </TooltipTrigger>
+                        <TooltipContent>題目有範例程式碼</TooltipContent>
+                      </Tooltip>
+                    )}
                     <Badge variant="secondary">{task.language}</Badge>
                     {userInfo?.role === "expert" && (
                       <DropdownMenu>
                         <DropdownMenuTrigger asChild>
-                          <Button
-                            variant="outline"
-                            size="icon"
-                            className="ml-2"
-                          >
+                          <Button variant="outline" size="icon">
                             <MoreVertical />
                           </Button>
                         </DropdownMenuTrigger>
