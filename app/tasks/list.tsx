@@ -8,13 +8,28 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { Check, Edit, Eye, Lock, MoreVertical, Trash } from "lucide-react";
+import {
+  Check,
+  Edit,
+  Eye,
+  Lock,
+  MoreVertical,
+  Search,
+  Trash,
+  X,
+} from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { deleteTask, getAllTasks } from "./actions";
 import { getUserInfo } from "@/components/utils/getUserInfo";
 import { toast } from "sonner";
+import { Input } from "@/components/ui/input";
+import {
+  InputGroup,
+  InputGroupAddon,
+  InputGroupInput,
+} from "@/components/ui/input-group";
 
 async function fetchTasks(userInfo: User) {
   const tasks = await getAllTasks(userInfo);
@@ -32,6 +47,7 @@ export default function TasksList({
 }) {
   const [tasks, setTasks] = useState<Task[]>(tasksData);
   const [userInfo, setUserInfo] = useState<User>();
+  const [searchTitle, setSearchTitle] = useState<string>("");
   const router = useRouter();
 
   useEffect(() => {
@@ -65,6 +81,22 @@ export default function TasksList({
 
   return (
     <div>
+      <InputGroup className="mb-4">
+        <InputGroupInput
+          placeholder="搜尋題目標題..."
+          value={searchTitle}
+          onChange={(x) => setSearchTitle(x.target.value)}
+        />
+        <InputGroupAddon align="inline-end">
+          {searchTitle === "" ? (
+            <Search />
+          ) : (
+            <Button variant="ghost" onClick={() => setSearchTitle("")}>
+              <X />
+            </Button>
+          )}
+        </InputGroupAddon>
+      </InputGroup>
       <div className="flex pb-1 mb-1 overflow-x-auto">
         {allTags.map((tag) => (
           <button
@@ -94,10 +126,11 @@ export default function TasksList({
         <div className="grid grid-cols-1 gap-4 mb-5">
           {tasks.map((task) => {
             if (
-              filterTag.length > 0 &&
-              !filterTag.every((tag) =>
-                task.tags.find((t) => t.$id === tag.$id),
-              )
+              (filterTag.length > 0 &&
+                !filterTag.every((tag) =>
+                  task.tags.find((t) => t.$id === tag.$id),
+                )) ||
+              !task.title.includes(searchTitle)
             ) {
               return null;
             }
