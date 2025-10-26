@@ -36,6 +36,7 @@ import {
   TooltipContent,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
+import { auth } from "@/auth";
 
 async function fetchTasks(userInfo: User) {
   const tasks = await getAllTasks(userInfo);
@@ -163,7 +164,7 @@ export default function TasksList({
                     </div>
                   </Link>
                   <div className="flex items-center gap-2">
-                    {task.sample && (
+                    {task.sample && userInfo?.role === "expert" && (
                       <Tooltip>
                         <TooltipTrigger>
                           <FileCode2 size={15} />
