@@ -42,5 +42,5 @@ export async function getUserProjects(userId?: string) {
 
 export async function getAllUser() {
   const { documents: users } = await db.listDocuments("db", "users");
-  return users;
+  return users as any as User[];
 }
