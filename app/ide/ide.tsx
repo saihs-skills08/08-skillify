@@ -6,6 +6,7 @@ import {
   LoaderIcon,
   Play,
   Square,
+  WandSparkles,
   X,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -19,6 +20,12 @@ import { FaJava } from "react-icons/fa";
 import Link from "next/link";
 import { Badge } from "@/components/ui/badge";
 import { EditProject } from "@/components/utils/project-actions";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
+import { toast } from "sonner";
 
 const MonacoEditor = dynamic(() => import("@monaco-editor/react"), {
   ssr: false,
@@ -133,6 +140,23 @@ export default function Ide({
     });
   }
 
+  function formatCode() {
+    toast.promise(
+      fetch(
+        `${process.env.NODE_ENV === "development" ? "http" : "https"}://${process.env.NEXT_PUBLIC_BACKEND_HOST}/format/${project.language}`,
+        {
+          method: "POST",
+          body: code,
+        },
+      ).then(async (res) => setCode(await res.text())),
+      {
+        loading: "格式化程式碼中...",
+        success: "程式碼格式化成功!",
+        error: "程式碼格式化失敗!",
+      },
+    );
+  }
+
   return (
     <>
       <EditProject
@@ -183,12 +207,25 @@ export default function Ide({
             ) : (
               <Badge
                 variant="outline"
-                className={`${isBackup ? "text-gray-400" : "text-gray-500"}`}
+                className={`${isBackup ? "text-gray-400" : "text-gray-500"} rounded-full`}
               >
                 {isBackup ? <Check /> : <X />}
                 {isBackup ? "專案已儲存" : "專案尚未儲存"}
               </Badge>
             )}
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <Button
+                  variant="outline"
+                  size="icon"
+                  className="border-indigo-200 bg-indigo-100 hover:bg-indigo-200"
+                  onClick={formatCode}
+                >
+                  <WandSparkles />
+                </Button>
+              </TooltipTrigger>
+              <TooltipContent>格式化程式碼</TooltipContent>
+            </Tooltip>
             {isRunning ? (
               <Button
                 onClick={stopCode}
