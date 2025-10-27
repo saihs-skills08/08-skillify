@@ -31,11 +31,16 @@ export async function renameProject(projectId: string, newProject: Project) {
   return true;
 }
 
-export async function getUserProjects() {
+export async function getUserProjects(userId?: string) {
   const session = await auth();
   const { documents: projects } = (await db.listDocuments("db", "projects", [
-    Query.equal("owner", session?.user?.id ?? ("" as string)),
+    Query.equal("owner", userId ?? session?.user?.id ?? ("" as string)),
     Query.orderDesc("$updatedAt"),
   ])) as any as { documents: Project[] };
   return projects;
+}
+
+export async function getAllUser() {
+  const { documents: users } = await db.listDocuments("db", "users");
+  return users;
 }

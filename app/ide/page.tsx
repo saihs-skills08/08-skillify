@@ -2,6 +2,7 @@ import { auth } from "@/auth";
 import Ide from "./ide";
 import { getProjectInfo } from "./ide-actions";
 import NotFound from "../not-found";
+import { getUserInfo } from "@/components/utils/getUserInfo";
 
 export default async function IdePage({
   searchParams,
@@ -19,7 +20,8 @@ export default async function IdePage({
   }
   const session = await auth();
   const userId = session?.user?.id;
-  if (userId !== initContent.owner.$id) {
+  const userInfo = await getUserInfo(userId);
+  if (userId !== initContent.owner.$id && userInfo.role !== "expert") {
     return <NotFound />;
   }
 

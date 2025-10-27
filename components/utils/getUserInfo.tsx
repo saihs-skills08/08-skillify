@@ -7,7 +7,7 @@ export async function getUserInfo(userId?: string) {
   const user = await db.getDocument(
     "db",
     "users",
-    userId ? userId : session?.user?.id || "",
+    userId ? userId : (session?.user?.id ?? ""),
   );
 
   return user as any as User;

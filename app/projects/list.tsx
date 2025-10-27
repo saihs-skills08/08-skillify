@@ -22,13 +22,24 @@ import {
   InputGroupInput,
 } from "@/components/ui/input-group";
 import { toast } from "sonner";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 
 export default function ProjectList({
   className,
   projectData,
+  userInfo,
+  allUsers,
 }: {
   projectData: Project[];
   className?: string;
+  userInfo: User;
+  allUsers: User[];
 }) {
   const [projects, setProjects] = useState<Project[]>(projectData);
   const [showDeleteProject, setShowDeleteProject] = useState<string | null>(
@@ -46,25 +57,54 @@ export default function ProjectList({
 
   return (
     <>
+      <div className="flex gap-2">
+        {!isEmpty && (
+          <InputGroup className="mb-4">
+            <InputGroupInput
+              placeholder="搜尋專案..."
+              value={searchText}
+              onChange={(x) => setSearchText(x.target.value)}
+            />
+            <InputGroupAddon align="inline-end">
+              {searchText === "" ? (
+                <Search />
+              ) : (
+                <Button variant="ghost" onClick={() => setSearchText("")}>
+                  <X />
+                </Button>
+              )}
+            </InputGroupAddon>
+          </InputGroup>
+        )}
+        {userInfo?.role === "expert" && (
+          <Select
+            onValueChange={(value) => {
+              toast.promise(
+                getUserProjects(value).then((userProject) => {
+                  setProjects(userProject);
+                }),
+                {
+                  loading: "載入使用者專案中...",
+                  success: "使用者專案載入成功!",
+                  error: "使用者專案載入失敗!",
+                },
+              );
+            }}
+          >
+            <SelectTrigger>
+              <SelectValue placeholder="取得使用者專案" />
+            </SelectTrigger>
+            <SelectContent>
+              {allUsers.map((user) => (
+                <SelectItem key={user.$id} value={user.$id}>
+                  {user.name}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+        )}
+      </div>
       {isEmpty && <NoProjects />}
-      {!isEmpty && (
-        <InputGroup className="mb-4">
-          <InputGroupInput
-            placeholder="搜尋專案..."
-            value={searchText}
-            onChange={(x) => setSearchText(x.target.value)}
-          />
-          <InputGroupAddon align="inline-end">
-            {searchText === "" ? (
-              <Search />
-            ) : (
-              <Button variant="ghost" onClick={() => setSearchText("")}>
-                <X />
-              </Button>
-            )}
-          </InputGroupAddon>
-        </InputGroup>
-      )}
       <div className="grid gap-4 grid-cols-1 md:grid-cols-2">
         {projects.map(
           (project) =>
