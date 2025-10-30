@@ -186,11 +186,11 @@ export default function TaskEdit({
                 className="border-dashed"
                 size="icon"
                 onClick={() => {
-                  const selectedTag: any = allTags.find(
+                  const tag: any = allTags.find(
                     (tag) => tag.$id === seletedTag,
                   );
-                  if (!tags.find((t) => t.$id === selectedTag.$id)) {
-                    setTags([...tags, selectedTag!]);
+                  if (!tags.find((t) => t.$id === tag.$id)) {
+                    setTags([...tags, tag!]);
                   }
                 }}
               >

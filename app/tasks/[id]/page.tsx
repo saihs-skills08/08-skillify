@@ -69,7 +69,7 @@ export default async function TaskInfoPage({
       </Link>
       <div className="flex gap-1 items-center mt-2">
         <Avatar className="h-5 w-5">
-          <AvatarImage src={task.creator.avatar} />
+          <AvatarImage src={task.creator.avatar} />{" "}
           <AvatarFallback>{task.creator.name.charAt(0)}</AvatarFallback>
         </Avatar>
         <p className="text-gray-500 text-xs">由 {task.creator.name} 創建</p>
@@ -119,7 +119,7 @@ export default async function TaskInfoPage({
                     {hasSubmitted ? "重新繳交作業" : "繳交作業"}
                   </DialogTitle>
                   <DialogDescription>
-                    請在下方的編輯器中貼上並提交你這個作業程式碼。
+                    請在下方的編輯器中貼上並提交你這個作業的程式碼。
                   </DialogDescription>
                   <SubmitAssignment
                     task={task}
@@ -137,22 +137,6 @@ export default async function TaskInfoPage({
                 </Button>
               </DropdownMenuTrigger>
               <DropdownMenuContent className="m-2">
-                {/* <DropdownMenuItem
-                  onClick={async () => {
-                    "use server";
-                    toast.promise(deleteTask(task.$id), {
-                      loading: "刪除題目中...",
-                      success: () => {
-                        redirect("/tasks");
-                        return "題目刪除成功！";
-                      },
-                      error: "題目刪除失敗，請稍後再試！",
-                    });
-                  }}
-                >
-                  <Trash />
-                  刪除
-                </DropdownMenuItem> */}
                 <Link href={`/tasks/edit/${task.$id}`}>
                   <DropdownMenuItem>
                     <Edit />
@@ -199,9 +183,7 @@ export default async function TaskInfoPage({
           );
         })}
       </div>
-      <div className="my-8">
-        <SampleCode task={task} />
-      </div>
+      <div className="my-8">{task.sample && <SampleCode task={task} />}</div>
     </section>
   );
 }

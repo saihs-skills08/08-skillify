@@ -2,7 +2,13 @@
 
 import { Button } from "@/components/ui/button";
 import CodeBlock from "@/components/utils/HighlightCode";
-import { Check, CornerUpLeft, ExternalLink, Trash } from "lucide-react";
+import {
+  Check,
+  ClipboardIcon,
+  CornerUpLeft,
+  ExternalLink,
+  Trash,
+} from "lucide-react";
 import Link from "next/link";
 import { toast } from "sonner";
 import {
@@ -11,7 +17,12 @@ import {
   markAssignmentDone,
 } from "./update-assignment-state";
 import { useEffect, useState } from "react";
-import { client } from "@/appwrite";
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from "@/components/ui/accordion";
 
 export default function TaskAssignmentPage({
   originalAssignment,
@@ -20,22 +31,6 @@ export default function TaskAssignmentPage({
 }) {
   const [assignments, setAssignments] =
     useState<Assignment[]>(originalAssignment);
-  // useEffect(() => {
-  //   const realtime = client.subscribe(["documents"], (response) => {
-  //     if (
-  //       response.channels.includes(
-  //         "databases.db.collections.assignment.documents"
-  //       )
-  //     ) {
-  //       getAssignment().then((data) => {
-  //         setAssignments(data);
-  //       });
-  //     }
-  //   });
-  //   return () => {
-  //     realtime();
-  //   };
-  // }, []);
   return (
     <div>
       <Link href="/tasks">
@@ -49,15 +44,20 @@ export default function TaskAssignmentPage({
         {assignments.map((assignment: Assignment) => (
           <li
             key={assignment.$id}
-            className={`my-4 p-4 border rounded-xl ${
-              assignment.done ? "border-green-500 border-" : ""
+            className={`my-4 p-4 flex flex-col relative border rounded-xl ${
+              assignment.done ? "border-green-400 border-" : ""
             }`}
           >
-            <div className="flex justify-between mb-2 md:flex-row flex-col">
+            {assignment.done && (
+              <div className="absolute left-[-10px] top-[-10px] drop-shadow-md bg-green-400 rounded-full p-1">
+                <Check size={20} />
+              </div>
+            )}
+            <div className="flex justify-between md:flex-row flex-col">
               <div>
                 <h2 className="text-xl font-bold">{assignment.owner.name}</h2>
                 <p className="text-xs text-gray-500">{assignment.$createdAt}</p>
-                <Button variant="link" className="p-0 mb-2">
+                <Button variant="link" className="p-0">
                   <Link
                     className="text-lg flex items-center gap-1"
                     href={`/tasks/${assignment.tasks.$id}`}
@@ -118,11 +118,30 @@ export default function TaskAssignmentPage({
                 </Button>
               </div>
             </div>
-            <CodeBlock
-              code={assignment.content}
-              language={assignment.tasks.language}
-              showLineNumbers={true}
-            />
+            <Accordion type="single" collapsible>
+              <AccordionItem value="code">
+                <AccordionTrigger>程式碼</AccordionTrigger>
+                <AccordionContent>
+                  <div className="flex flex-col">
+                    <CodeBlock
+                      code={assignment.content}
+                      language={assignment.tasks.language}
+                      showLineNumbers={true}
+                    />
+                    <Button
+                      size="icon"
+                      onClick={() => {
+                        navigator.clipboard.writeText(assignment.content);
+                        toast.success("程式碼已複製到剪貼簿！");
+                      }}
+                      className="self-end"
+                    >
+                      <ClipboardIcon />
+                    </Button>
+                  </div>
+                </AccordionContent>
+              </AccordionItem>
+            </Accordion>
           </li>
         ))}
       </ul>

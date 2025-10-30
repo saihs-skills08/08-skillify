@@ -14,7 +14,6 @@ import dynamic from "next/dynamic";
 import { useEffect, useRef, useState } from "react";
 import "@xterm/xterm/css/xterm.css";
 import { getProjectInfo, updateProjectContent } from "./ide-actions";
-import { client } from "@/appwrite";
 import { TbBrandKotlin } from "react-icons/tb";
 import { FaJava } from "react-icons/fa";
 import Link from "next/link";
