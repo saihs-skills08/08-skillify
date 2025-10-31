@@ -186,11 +186,15 @@ export default function TaskEdit({
                 className="border-dashed"
                 size="icon"
                 onClick={() => {
-                  const tag: any = allTags.find(
-                    (tag) => tag.$id === seletedTag,
-                  );
-                  if (!tags.find((t) => t.$id === tag.$id)) {
-                    setTags([...tags, tag!]);
+                  if (seletedTag) {
+                    const tag: any = allTags.find(
+                      (tag) => tag.$id === seletedTag,
+                    );
+                    if (!tags.find((t) => t.$id === tag.$id)) {
+                      setTags([...tags, tag!]);
+                    }
+                  } else {
+                    toast.error("請先選擇標籤！");
                   }
                 }}
               >
