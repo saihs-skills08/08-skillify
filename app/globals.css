@@ -11,6 +11,12 @@ html {
   font-family: "JetBrains Mono", monospace;
 }
 
+/* nav link */
+.nav-link:hover ~ .nav-link-current {
+  background: transparent;
+  filter: none;
+}
+
 @custom-variant dark (&:is(.dark *));
 
 @theme {

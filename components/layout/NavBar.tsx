@@ -15,6 +15,7 @@ import Link from "next/link";
 import ShadowWarpper from "./ShadowWarpper";
 import { getUserInfo } from "../utils/getUserInfo";
 import { Badge } from "../ui/badge";
+import NavLinkWrapper from "./NavLinkWrapper";
 
 export default async function NavBar() {
   const session = await auth();
@@ -39,12 +40,7 @@ export default async function NavBar() {
           </Link>
           <ul className="flex list-none">
             {navItems.map((item) => (
-              <li
-                key={item.name}
-                className="text-lg font-medium hover:bg-green-100 hover:ring ring-green-200 hover:opacity-[80%] hover:drop-shadow-md px-3 py-1 rounded-full duration-200"
-              >
-                <Link href={item.href}>{item.name}</Link>
-              </li>
+              <NavLinkWrapper key={item.name} item={item} />
             ))}
           </ul>
         </div>

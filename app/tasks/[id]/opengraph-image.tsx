@@ -8,7 +8,7 @@ export const size = {
 
 export const contentType = "image/png";
 
-async function loadGoogleFont(font: string, text: string) {
+async function loadGoogleFont(font: string) {
   const url = `https://fonts.googleapis.com/css2?family=${font}`;
   const css = await (await fetch(url)).text();
   const resource = css.match(
@@ -34,7 +34,7 @@ export default async function Image({ params }: { params: { id: string } }) {
           width: "100%",
           height: "100%",
           display: "flex",
-          padding: "20px 50px",
+          padding: "30px 80px",
           backgroundColor: "#fff",
           fontFamily: "Geist, sans-serif",
           fontWeight: "900",
@@ -55,6 +55,18 @@ export default async function Image({ params }: { params: { id: string } }) {
             zIndex: 0,
           }}
         ></div>
+        <img
+          src="https://skillify.eliaschen.dev/worldskills-logo.svg"
+          alt="Logo"
+          style={{
+            position: "absolute",
+            bottom: "50px",
+            right: "100px",
+            width: "130px",
+            height: "130px",
+            zIndex: 10,
+          }}
+        />
         <div
           style={{
             flexDirection: "column",
@@ -63,15 +75,23 @@ export default async function Image({ params }: { params: { id: string } }) {
             zIndex: 10,
           }}
         >
-          <h1 style={{ fontSize: "100px", fontWeight: "bold", width: "90%" }}>
+          <h1
+            style={{
+              fontSize: "100px",
+              fontWeight: "bold",
+            }}
+          >
             {task.title}
           </h1>
           <div
             style={{
-              fontSize: "30px",
+              fontSize: "35px",
               display: "flex",
-              gap: "20px",
+              rowGap: "-50px",
+              columnGap: "20px",
               fontWeight: "bold",
+              flexWrap: "wrap",
+              width: "885px",
             }}
           >
             {task.tags.map((tag: Tag) => (
@@ -90,18 +110,6 @@ export default async function Image({ params }: { params: { id: string } }) {
             ))}
           </div>
         </div>
-        <img
-          src="https://skillify.eliaschen.dev/worldskills-logo.svg"
-          alt="Logo"
-          style={{
-            position: "absolute",
-            bottom: "50px",
-            right: "50px",
-            width: "100px",
-            height: "100px",
-            zIndex: 10,
-          }}
-        />
       </div>
     ),
     {
@@ -110,7 +118,7 @@ export default async function Image({ params }: { params: { id: string } }) {
       fonts: [
         {
           name: "Geist",
-          data: await loadGoogleFont("Geist", task.title),
+          data: await loadGoogleFont("Geist"),
           style: "normal",
         },
       ],
