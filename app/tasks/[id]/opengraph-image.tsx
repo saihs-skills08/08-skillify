@@ -34,12 +34,27 @@ export default async function Image({ params }: { params: { id: string } }) {
           width: "100%",
           height: "100%",
           display: "flex",
-          padding: "50px",
+          padding: "20px 50px",
           backgroundColor: "#fff",
           fontFamily: "Geist, sans-serif",
           fontWeight: "900",
         }}
       >
+        <div
+          style={{
+            position: "absolute",
+            top: "0px",
+            right: "0px",
+            width: "500px",
+            height: "500px",
+            backgroundColor: "#15d487",
+            opacity: 0.5,
+            borderRadius: "100px",
+            rotate: "45deg",
+            filter: "blur(100px)",
+            zIndex: 0,
+          }}
+        ></div>
         <div
           style={{
             flexDirection: "column",
@@ -48,12 +63,12 @@ export default async function Image({ params }: { params: { id: string } }) {
             zIndex: 10,
           }}
         >
-          <h1 style={{ fontSize: "100px", fontWeight: "bold" }}>
+          <h1 style={{ fontSize: "100px", fontWeight: "bold", width: "90%" }}>
             {task.title}
           </h1>
           <div
             style={{
-              fontSize: "20px",
+              fontSize: "30px",
               display: "flex",
               gap: "20px",
               fontWeight: "bold",
@@ -75,21 +90,6 @@ export default async function Image({ params }: { params: { id: string } }) {
             ))}
           </div>
         </div>
-        <div
-          style={{
-            position: "absolute",
-            top: "0px",
-            right: "0px",
-            width: "500px",
-            height: "500px",
-            backgroundColor: "#15d487",
-            opacity: 0.5,
-            borderRadius: "100px",
-            rotate: "45deg",
-            filter: "blur(100px)",
-            zIndex: 0,
-          }}
-        ></div>
         <img
           src="https://skillify.eliaschen.dev/worldskills-logo.svg"
           alt="Logo"
