@@ -30,12 +30,13 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip";
 import SampleCode from "./sample-code";
+import { Metadata } from "next";
 
 export async function generateMetadata({
   params,
 }: {
   params: Promise<{ id: string }>;
-}) {
+}): Promise<Metadata> {
   const { id } = await params;
   const task = await db.getDocument("db", "tasks", id);
   return {
