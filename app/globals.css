@@ -11,8 +11,7 @@ html {
   font-family: "JetBrains Mono", monospace;
 }
 
-/* nav link */
-.nav-link:hover ~ .nav-link-current {
+.nav-links-list:has(.nav-link:hover) .nav-link-current {
   background: transparent;
   filter: none;
 }

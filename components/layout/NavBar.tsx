@@ -38,7 +38,7 @@ export default async function NavBar() {
               height={40}
             />
           </Link>
-          <ul className="flex list-none">
+          <ul className="flex list-none nav-links-list">
             {navItems.map((item) => (
               <NavLinkWrapper key={item.name} item={item} />
             ))}
