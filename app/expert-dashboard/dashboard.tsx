@@ -36,6 +36,9 @@ export default function ExpertDashboard({ userStats }: { userStats: UserStats[] 
                           src={stat.user.avatar}
                           alt={stat.user.name}
                           className="w-10 h-10 rounded-full border"
+                          onError={(e) => {
+                            e.currentTarget.src = `https://ui-avatars.com/api/?name=${encodeURIComponent(stat.user.name)}&background=random`;
+                          }}
                         />
                         <div>
                           <p className="font-medium">{stat.user.name}</p>

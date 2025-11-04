@@ -11,6 +11,7 @@ export interface UserStats {
 
 export async function getUsersWithTaskStats(): Promise<UserStats[]> {
   // Fetch all users
+  // Note: For large datasets, consider implementing pagination
   const usersResponse = await db.listDocuments("db", "users");
   const users = usersResponse.documents as any as User[];
 
