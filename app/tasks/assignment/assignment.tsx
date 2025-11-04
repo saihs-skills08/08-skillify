@@ -16,7 +16,7 @@ import {
   getAssignment,
   markAssignmentDone,
 } from "./update-assignment-state";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import {
   Accordion,
   AccordionContent,
