@@ -41,7 +41,7 @@ export default function TaskAssignmentPage({
         <li
           key={assignment.$id}
           className={`my-4 p-4 flex flex-col relative border rounded-xl ${
-            assignment.done ? "border-green-400 border-" : ""
+            assignment.done ? "border-green-400 border-2" : ""
           }`}
         >
           {assignment.done && (
