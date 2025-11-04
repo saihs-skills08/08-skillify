@@ -66,8 +66,8 @@ export default async function NavBar() {
               <DropdownMenuSeparator />
               {/* <DropdownMenuItem>Profile</DropdownMenuItem> */}
               {userInfo.role === "expert" && (
-                <Link href="/expert-dashboard">
-                  <DropdownMenuItem>專家儀表板</DropdownMenuItem>
+                <Link href="/dashboard">
+                  <DropdownMenuItem>儀表板</DropdownMenuItem>
                 </Link>
               )}
               <DropdownMenuItem

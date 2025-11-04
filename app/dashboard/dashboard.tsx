@@ -6,8 +6,8 @@ import { UserStats } from "./actions";
 export default function ExpertDashboard({ userStats }: { userStats: UserStats[] }) {
   return (
     <div className="p-6 max-w-7xl mx-auto">
-      <h1 className="text-4xl font-bold mb-2">專家儀表板</h1>
-      <p className="text-gray-600 mb-6">查看平台上所有用戶及其任務完成情況</p>
+      <h1 className="text-4xl font-bold mb-2">儀表板</h1>
+      <p className="text-gray-600 mb-6">查看平台上所有用戶及其練習完成情況</p>
       
       <div className="bg-white rounded-lg border shadow-sm">
         <div className="overflow-x-auto">
@@ -16,8 +16,8 @@ export default function ExpertDashboard({ userStats }: { userStats: UserStats[] 
               <tr className="border-b bg-gray-50">
                 <th className="text-left p-4 font-semibold">用戶</th>
                 <th className="text-left p-4 font-semibold">角色</th>
-                <th className="text-center p-4 font-semibold">已完成任務</th>
-                <th className="text-center p-4 font-semibold">總任務數</th>
+                <th className="text-center p-4 font-semibold">已完成練習</th>
+                <th className="text-center p-4 font-semibold">總練習數</th>
                 <th className="text-center p-4 font-semibold">完成率</th>
               </tr>
             </thead>
