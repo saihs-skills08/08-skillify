@@ -11,7 +11,9 @@ export const taskComponents: MDXComponents = {
   p: ({ children }) => (
     <p className="leading-7 whitespace-pre-line">{children}</p>
   ),
-  img: (props) => <img {...props} className="rounded-xl mx-auto my-2" />,
+  img: (props) => (
+    <img {...props} className="rounded-xl mx-auto my-2 max-h-[600px]" />
+  ),
   hr: () => <hr className="my-5 border-green-200" />,
   a: ({ children, href }) => (
     <a
