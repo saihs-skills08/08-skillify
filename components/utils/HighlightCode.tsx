@@ -23,6 +23,7 @@ export default function CodeBlock({
         backgroundColor: "#282c34",
         fontSize: "0.9rem",
       }}
+      className="overflow-auto max-h-[60vh]"
     >
       {code}
     </SyntaxHighlighter>
