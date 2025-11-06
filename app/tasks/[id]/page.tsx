@@ -152,8 +152,75 @@ export default async function TaskInfoPage({
       </div>
       <MDXRemote source={task.info} components={taskComponents} />
       <div className="mt-4">
-        {task.tasksResults.map((result, index) => {
-          const ResultComponent = `
+        {task.language.toLowerCase() === "android" ? (
+          // Android platform: show images in flex-wrap layout without 範例 headers
+          <>
+            <div className="flex flex-wrap gap-4 mb-4">
+              {task.tasksResults
+                .filter((result) => result.imageUrl)
+                .map((result, index) => (
+                  <div key={result.$id} className="flex-shrink-0">
+                    <Image
+                      src={result.imageUrl!}
+                      alt={`執行結果 ${index + 1}`}
+                      width={300}
+                      height={200}
+                      className="rounded-md border"
+                    />
+                  </div>
+                ))}
+            </div>
+            {task.tasksResults.some(
+              (result) => result.input || result.output,
+            ) && (
+              <div className="mt-4">
+                {task.tasksResults.map((result, index) => {
+                  const hasInput = result.input && result.input.trim() !== "";
+                  const hasOutput =
+                    result.output && result.output.trim() !== "";
+
+                  if (!hasInput && !hasOutput) return null;
+
+                  const ResultComponent = `
+                    ${hasInput ? `輸入範例` : ""}
+                    ${
+                      hasInput
+                        ? `
+                    \`\`\`${task.language}
+                    ${result.input}
+                    \`\`\`
+                    `
+                        : ""
+                    }
+                    ${hasOutput ? `輸出範例` : ""}
+                    ${
+                      hasOutput
+                        ? `
+                    \`\`\`${task.language}
+                    ${result.output}
+                    \`\`\`
+                    `
+                        : ""
+                    }
+                    ${index < task.tasksResults.length - 1 ? "---" : ""}
+                    `;
+
+                  return (
+                    <div key={result.$id}>
+                      <MDXRemote
+                        source={ResultComponent}
+                        components={taskComponents}
+                      />
+                    </div>
+                  );
+                })}
+              </div>
+            )}
+          </>
+        ) : (
+          // Non-Android platforms: keep original format
+          task.tasksResults.map((result, index) => {
+            const ResultComponent = `
             # 範例${index + 1}
             ${result.input != "" ? `輸入範例` : ""}
             ${
@@ -178,24 +245,28 @@ export default async function TaskInfoPage({
             ---
             `;
 
-          return (
-            <div key={result.$id}>
-              <MDXRemote source={ResultComponent} components={taskComponents} />
-              {result.imageUrl && (
-                <div className="mt-2 mb-4">
-                  <p className="text-sm font-medium mb-2">執行結果圖片：</p>
-                  <Image
-                    src={result.imageUrl}
-                    alt={`範例 ${index + 1} 執行結果`}
-                    width={600}
-                    height={400}
-                    className="rounded-md border"
-                  />
-                </div>
-              )}
-            </div>
-          );
-        })}
+            return (
+              <div key={result.$id}>
+                <MDXRemote
+                  source={ResultComponent}
+                  components={taskComponents}
+                />
+                {result.imageUrl && (
+                  <div className="mt-2 mb-4">
+                    <p className="text-sm font-medium mb-2">執行結果圖片：</p>
+                    <Image
+                      src={result.imageUrl}
+                      alt={`範例 ${index + 1} 執行結果`}
+                      width={600}
+                      height={400}
+                      className="rounded-md border"
+                    />
+                  </div>
+                )}
+              </div>
+            );
+          })
+        )}
       </div>
       <div className="my-8">{task.sample && <SampleCode task={task} />}</div>
     </section>
