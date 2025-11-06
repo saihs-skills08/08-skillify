@@ -125,7 +125,7 @@ export default function TaskEdit({
             <SelectContent>
               <SelectItem value="kotlin">Kotlin</SelectItem>
               <SelectItem value="java">Java</SelectItem>
-              <SelectItem value="Android">Android</SelectItem>
+              <SelectItem value="android">Android</SelectItem>
             </SelectContent>
           </Select>
         </div>
@@ -346,7 +346,7 @@ export default function TaskEdit({
           <div className="mt-2 p-1 border rounded-lg">
             <MonacoEditor
               height="200px"
-              defaultLanguage={language ?? "plaintext"}
+              defaultLanguage={language === "android" ? "kotlin" : language ?? "plaintext"}
               defaultValue={sample}
               value={sample}
               onChange={(code) => {

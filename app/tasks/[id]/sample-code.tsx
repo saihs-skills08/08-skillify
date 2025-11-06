@@ -32,7 +32,7 @@ export default function SampleCode({ task }: { task: Task }) {
           </DialogHeader>
           <CodeBlock
             code={task.sample || "// 本題目尚未提供範例程式碼"}
-            language={task.language}
+            language={task.language === "android" ? "kotlin" : task.language}
             showLineNumbers={true}
           />
         </DialogContent>
