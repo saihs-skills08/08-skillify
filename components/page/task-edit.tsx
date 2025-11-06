@@ -46,6 +46,13 @@ import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { submitNewTask } from "@/app/tasks/new/actions";
 import dynamic from "next/dynamic";
+import {
+  storage,
+  BUCKET_ID,
+  getStorageFileUrl,
+  getFileIdFromUrl,
+} from "@/appwrite";
+import Image from "next/image";
 
 const MonacoEditor = dynamic(() => import("@monaco-editor/react"), {
   ssr: false,
@@ -71,6 +78,56 @@ export default function TaskEdit({
   const [language, setLanguage] = useState<Language>(
     task ? (task.language as Language) : "java",
   );
+  const [uploadingImage, setUploadingImage] = useState<string | null>(null);
+
+  const handleImageUpload = async (
+    file: File,
+    resultId: string,
+  ): Promise<void> => {
+    try {
+      setUploadingImage(resultId);
+
+      const response = await storage.createFile(BUCKET_ID, ID.unique(), file);
+
+      const fileUrl = getStorageFileUrl(response.$id);
+
+      setTaskResults((prev) =>
+        prev.map((r) =>
+          r.$id === resultId ? { ...r, imageUrl: fileUrl } : r,
+        ),
+      );
+
+      toast.success("圖片上傳成功！");
+    } catch (error) {
+      console.error("Error uploading image:", error);
+      toast.error("圖片上傳失敗，請稍後再試！");
+    } finally {
+      setUploadingImage(null);
+    }
+  };
+
+  const handleImageRemove = async (
+    resultId: string,
+    imageUrl: string,
+  ): Promise<void> => {
+    try {
+      const fileId = getFileIdFromUrl(imageUrl);
+      if (fileId) {
+        await storage.deleteFile(BUCKET_ID, fileId);
+      }
+
+      setTaskResults((prev) =>
+        prev.map((r) =>
+          r.$id === resultId ? { ...r, imageUrl: undefined } : r,
+        ),
+      );
+
+      toast.success("圖片已移除");
+    } catch (error) {
+      console.error("Error deleting image:", error);
+      toast.error("圖片移除失敗，請稍後再試！");
+    }
+  };
 
   return (
     <div>
@@ -125,7 +182,7 @@ export default function TaskEdit({
             <SelectContent>
               <SelectItem value="kotlin">Kotlin</SelectItem>
               <SelectItem value="java">Java</SelectItem>
-              <SelectItem value="Android">Android</SelectItem>
+              <SelectItem value="android">Android</SelectItem>
             </SelectContent>
           </Select>
         </div>
@@ -298,6 +355,57 @@ export default function TaskEdit({
                         );
                       }}
                     />
+                    {language.toLowerCase() === "android" && (
+                      <div className="mt-2">
+                        <Label htmlFor={`image-${result.$id}`}>
+                          執行結果圖片 (可選)
+                        </Label>
+                        <div className="flex gap-2 items-center mt-1">
+                          <Input
+                            type="file"
+                            id={`image-${result.$id}`}
+                            accept="image/*"
+                            onChange={(e) => {
+                              const file = e.target.files?.[0];
+                              if (file) {
+                                handleImageUpload(file, result.$id);
+                              }
+                            }}
+                            disabled={uploadingImage === result.$id}
+                          />
+                          {uploadingImage === result.$id && (
+                            <span className="text-sm text-gray-500">
+                              上傳中...
+                            </span>
+                          )}
+                        </div>
+                        {result.imageUrl && (
+                          <div className="mt-2 relative">
+                            <Image
+                              src={result.imageUrl}
+                              alt="執行結果"
+                              width={300}
+                              height={200}
+                              className="rounded-md border"
+                            />
+                            <Button
+                              type="button"
+                              variant="destructive"
+                              size="sm"
+                              className="mt-2"
+                              onClick={() => {
+                                if (result.imageUrl) {
+                                  handleImageRemove(result.$id, result.imageUrl);
+                                }
+                              }}
+                            >
+                              <Trash className="h-4 w-4 mr-1" />
+                              移除圖片
+                            </Button>
+                          </div>
+                        )}
+                      </div>
+                    )}
                   </Card>
                 </li>
               ))
