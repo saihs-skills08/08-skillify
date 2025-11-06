@@ -454,7 +454,9 @@ export default function TaskEdit({
           <div className="mt-2 p-1 border rounded-lg">
             <MonacoEditor
               height="200px"
-              defaultLanguage={language ?? "plaintext"}
+              defaultLanguage={
+                language === "android" ? "kotlin" : language ?? "plaintext"
+              }
               defaultValue={sample}
               value={sample}
               onChange={(code) => {
