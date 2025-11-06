@@ -66,7 +66,7 @@ export default function CreateNewTasks({ edit }: { edit: boolean }) {
             <SelectContent>
               <SelectItem value="kotlin">Kotlin</SelectItem>
               <SelectItem value="java">Java</SelectItem>
-              <SelectItem value="Android">Android</SelectItem>
+              <SelectItem value="android">Android</SelectItem>
             </SelectContent>
           </Select>
         </div>
