@@ -125,7 +125,7 @@ export default function TaskEdit({
             <SelectContent>
               <SelectItem value="kotlin">Kotlin</SelectItem>
               <SelectItem value="java">Java</SelectItem>
-              <SelectItem value="Android">Android</SelectItem>
+              <SelectItem value="android">Android</SelectItem>
             </SelectContent>
           </Select>
         </div>
