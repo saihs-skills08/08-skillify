@@ -5,11 +5,12 @@ import { UserStats } from "./actions";
 
 export default function ExpertDashboard({ userStats }: { userStats: UserStats[] }) {
   return (
-    <div className="p-6 max-w-7xl mx-auto">
-      <h1 className="text-4xl font-bold mb-2">儀表板</h1>
-      <p className="text-gray-600 mb-6">查看平台上所有選手及其練習完成情況</p>
+    <div className="p-4 sm:p-6 max-w-7xl mx-auto">
+      <h1 className="text-2xl sm:text-4xl font-bold mb-2">儀表板</h1>
+      <p className="text-sm sm:text-base text-gray-600 mb-4 sm:mb-6">查看平台上所有選手及其練習完成情況</p>
       
-      <div className="bg-white rounded-lg border shadow-sm">
+      {/* Desktop Table View - hidden on mobile */}
+      <div className="hidden md:block bg-white rounded-lg border shadow-sm">
         <div className="overflow-x-auto">
           <table className="w-full">
             <thead>
@@ -58,6 +59,47 @@ export default function ExpertDashboard({ userStats }: { userStats: UserStats[] 
         
         {userStats.length === 0 && (
           <div className="p-8 text-center text-gray-500">
+            目前沒有選手數據
+          </div>
+        )}
+      </div>
+
+      {/* Mobile Card View - visible only on mobile */}
+      <div className="md:hidden space-y-3">
+        {userStats.map((stat) => {
+          return (
+            <div key={stat.user.$id} className="bg-white rounded-lg border shadow-sm p-4">
+              <div className="flex items-start justify-between mb-3">
+                <div className="flex items-center gap-3 flex-1 min-w-0">
+                  <img
+                    src={stat.user.avatar}
+                    alt={stat.user.name}
+                    className="w-12 h-12 rounded-full border flex-shrink-0"
+                    onError={(e) => {
+                      e.currentTarget.src = `https://ui-avatars.com/api/?name=${encodeURIComponent(stat.user.name)}&background=random`;
+                    }}
+                  />
+                  <div className="min-w-0 flex-1">
+                    <p className="font-medium truncate">{stat.user.name}</p>
+                    <p className="text-sm text-gray-500 truncate">{stat.user.email}</p>
+                  </div>
+                </div>
+                <Badge variant={stat.user.role === "expert" ? "default" : "secondary"} className="flex-shrink-0 ml-2">
+                  {stat.user.role.toUpperCase()}
+                </Badge>
+              </div>
+              <div className="flex items-center justify-between pt-3 border-t">
+                <span className="text-sm text-gray-600">已完成練習</span>
+                <span className="text-xl font-semibold text-green-600">
+                  {stat.completedTasks}
+                </span>
+              </div>
+            </div>
+          );
+        })}
+        
+        {userStats.length === 0 && (
+          <div className="bg-white rounded-lg border shadow-sm p-8 text-center text-gray-500">
             目前沒有選手數據
           </div>
         )}
