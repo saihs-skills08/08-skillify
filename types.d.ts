@@ -31,6 +31,7 @@ interface TaskResult {
   $id: string;
   input: string;
   output: string;
+  imageUrl?: string;
 }
 
 interface Task {

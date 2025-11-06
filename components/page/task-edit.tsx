@@ -7,7 +7,7 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import ReactMarkdown from "react-markdown";
 import { Button } from "@/components/ui/button";
-import { ID } from "appwrite";
+import { ID, Storage } from "appwrite";
 import { Card } from "@/components/ui/card";
 import {
   BrushCleaning,
@@ -16,6 +16,8 @@ import {
   Trash,
   WandSparkles,
   X,
+  Upload,
+  Image as ImageIcon,
 } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Switch } from "@/components/ui/switch";
@@ -46,6 +48,8 @@ import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { submitNewTask } from "@/app/tasks/new/actions";
 import dynamic from "next/dynamic";
+import { client } from "@/appwrite";
+import Image from "next/image";
 
 const MonacoEditor = dynamic(() => import("@monaco-editor/react"), {
   ssr: false,
@@ -71,6 +75,40 @@ export default function TaskEdit({
   const [language, setLanguage] = useState<Language>(
     task ? (task.language as Language) : "java",
   );
+  const [uploadingImage, setUploadingImage] = useState<string | null>(null);
+
+  const handleImageUpload = async (
+    file: File,
+    resultId: string,
+  ): Promise<void> => {
+    try {
+      setUploadingImage(resultId);
+      const storageClient = new Storage(client);
+      const BUCKET_ID =
+        process.env.NEXT_PUBLIC_APPWRITE_BUCKET_ID || "task-results";
+
+      const response = await storageClient.createFile(
+        BUCKET_ID,
+        ID.unique(),
+        file,
+      );
+
+      const fileUrl = `${process.env.NEXT_PUBLIC_APPWRITE_ENDPOINT}/storage/buckets/${BUCKET_ID}/files/${response.$id}/view?project=${process.env.NEXT_PUBLIC_APPWRITE_PROJECT}`;
+
+      setTaskResults((prev) =>
+        prev.map((r) =>
+          r.$id === resultId ? { ...r, imageUrl: fileUrl } : r,
+        ),
+      );
+
+      toast.success("圖片上傳成功！");
+    } catch (error) {
+      console.error("Error uploading image:", error);
+      toast.error("圖片上傳失敗，請稍後再試！");
+    } finally {
+      setUploadingImage(null);
+    }
+  };
 
   return (
     <div>
@@ -298,6 +336,62 @@ export default function TaskEdit({
                         );
                       }}
                     />
+                    {language === "android" && (
+                      <div className="mt-2">
+                        <Label htmlFor={`image-${result.$id}`}>
+                          執行結果圖片 (可選)
+                        </Label>
+                        <div className="flex gap-2 items-center mt-1">
+                          <Input
+                            type="file"
+                            id={`image-${result.$id}`}
+                            accept="image/*"
+                            onChange={(e) => {
+                              const file = e.target.files?.[0];
+                              if (file) {
+                                handleImageUpload(file, result.$id);
+                              }
+                            }}
+                            disabled={uploadingImage === result.$id}
+                          />
+                          {uploadingImage === result.$id && (
+                            <span className="text-sm text-gray-500">
+                              上傳中...
+                            </span>
+                          )}
+                        </div>
+                        {result.imageUrl && (
+                          <div className="mt-2 relative">
+                            <Image
+                              src={result.imageUrl}
+                              alt="執行結果"
+                              width={300}
+                              height={200}
+                              className="rounded-md border"
+                            />
+                            <Button
+                              type="button"
+                              variant="destructive"
+                              size="sm"
+                              className="mt-2"
+                              onClick={() => {
+                                setTaskResults((prev) =>
+                                  prev.map((r) =>
+                                    r.$id === result.$id
+                                      ? { ...r, imageUrl: undefined }
+                                      : r,
+                                  ),
+                                );
+                                toast.success("圖片已移除");
+                              }}
+                            >
+                              <Trash className="h-4 w-4 mr-1" />
+                              移除圖片
+                            </Button>
+                          </div>
+                        )}
+                      </div>
+                    )}
                   </Card>
                 </li>
               ))

@@ -31,6 +31,7 @@ import {
 } from "@/components/ui/tooltip";
 import SampleCode from "./sample-code";
 import { Metadata } from "next";
+import Image from "next/image";
 
 export async function generateMetadata({
   params,
@@ -180,6 +181,18 @@ export default async function TaskInfoPage({
           return (
             <div key={result.$id}>
               <MDXRemote source={ResultComponent} components={taskComponents} />
+              {result.imageUrl && (
+                <div className="mt-2 mb-4">
+                  <p className="text-sm font-medium mb-2">執行結果圖片：</p>
+                  <Image
+                    src={result.imageUrl}
+                    alt={`範例 ${index + 1} 執行結果`}
+                    width={600}
+                    height={400}
+                    className="rounded-md border"
+                  />
+                </div>
+              )}
             </div>
           );
         })}
