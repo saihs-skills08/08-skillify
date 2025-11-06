@@ -152,13 +152,14 @@ export default async function TaskInfoPage({
       <MDXRemote source={task.info} components={taskComponents} />
       <div className="mt-4">
         {task.tasksResults.map((result, index) => {
+          const displayLanguage = task.language === "android" ? "kotlin" : task.language;
           const ResultComponent = `
             # 範例${index + 1}
             ${result.input != "" ? `輸入範例` : ""}
             ${
               result.input != ""
                 ? `
-            \`\`\`${task.language}
+            \`\`\`${displayLanguage}
             ${result.input}
             \`\`\`
             `
@@ -168,7 +169,7 @@ export default async function TaskInfoPage({
             ${
               result.output != ""
                 ? `
-            \`\`\`${task.language}
+            \`\`\`${displayLanguage}
             ${result.output}
             \`\`\`
             `
