@@ -17,17 +17,10 @@ export default function ExpertDashboard({ userStats }: { userStats: UserStats[] 
                 <th className="text-left p-4 font-semibold">用戶</th>
                 <th className="text-left p-4 font-semibold">角色</th>
                 <th className="text-center p-4 font-semibold">已完成練習</th>
-                <th className="text-center p-4 font-semibold">總練習數</th>
-                <th className="text-center p-4 font-semibold">完成率</th>
               </tr>
             </thead>
             <tbody>
               {userStats.map((stat) => {
-                const completionRate =
-                  stat.totalTasks > 0
-                    ? Math.round((stat.completedTasks / stat.totalTasks) * 100)
-                    : 0;
-
                 return (
                   <tr key={stat.user.$id} className="border-b hover:bg-gray-50">
                     <td className="p-4">
@@ -55,20 +48,6 @@ export default function ExpertDashboard({ userStats }: { userStats: UserStats[] 
                       <span className="text-lg font-semibold text-green-600">
                         {stat.completedTasks}
                       </span>
-                    </td>
-                    <td className="text-center p-4">
-                      <span className="text-lg font-semibold">{stat.totalTasks}</span>
-                    </td>
-                    <td className="text-center p-4">
-                      <div className="flex flex-col items-center gap-1">
-                        <span className="text-lg font-semibold">{completionRate}%</span>
-                        <div className="w-24 h-2 bg-gray-200 rounded-full overflow-hidden">
-                          <div
-                            className="h-full bg-green-500"
-                            style={{ width: `${completionRate}%` }}
-                          />
-                        </div>
-                      </div>
                     </td>
                   </tr>
                 );

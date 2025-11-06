@@ -36,11 +36,8 @@ export async function getUsersWithTaskStats(): Promise<UserStats[]> {
     };
   });
 
-  // Sort by total tasks (descending), then by completed tasks (descending)
+  // Sort by completed tasks (descending)
   userStats.sort((a, b) => {
-    if (b.totalTasks !== a.totalTasks) {
-      return b.totalTasks - a.totalTasks;
-    }
     return b.completedTasks - a.completedTasks;
   });
 
