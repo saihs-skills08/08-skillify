@@ -163,7 +163,7 @@ export default function TaskEdit({
             <SelectContent>
               <SelectItem value="kotlin">Kotlin</SelectItem>
               <SelectItem value="java">Java</SelectItem>
-              <SelectItem value="Android">Android</SelectItem>
+              <SelectItem value="android">Android</SelectItem>
             </SelectContent>
           </Select>
         </div>
@@ -336,7 +336,7 @@ export default function TaskEdit({
                         );
                       }}
                     />
-                    {language === "android" && (
+                    {language.toLowerCase() === "android" && (
                       <div className="mt-2">
                         <Label htmlFor={`image-${result.$id}`}>
                           執行結果圖片 (可選)
