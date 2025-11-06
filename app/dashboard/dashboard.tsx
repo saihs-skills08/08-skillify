@@ -7,15 +7,15 @@ export default function ExpertDashboard({ userStats }: { userStats: UserStats[] 
   return (
     <div className="p-6 max-w-7xl mx-auto">
       <h1 className="text-4xl font-bold mb-2">儀表板</h1>
-      <p className="text-gray-600 mb-6">查看平台上所有用戶及其練習完成情況</p>
+      <p className="text-gray-600 mb-6">查看平台上所有選手及其練習完成情況</p>
       
       <div className="bg-white rounded-lg border shadow-sm">
         <div className="overflow-x-auto">
           <table className="w-full">
             <thead>
               <tr className="border-b bg-gray-50">
-                <th className="text-left p-4 font-semibold">用戶</th>
-                <th className="text-left p-4 font-semibold">角色</th>
+                <th className="text-left p-4 font-semibold">選手</th>
+                <th className="text-left p-4 font-semibold">權限</th>
                 <th className="text-center p-4 font-semibold">已完成練習</th>
               </tr>
             </thead>
@@ -58,7 +58,7 @@ export default function ExpertDashboard({ userStats }: { userStats: UserStats[] 
         
         {userStats.length === 0 && (
           <div className="p-8 text-center text-gray-500">
-            目前沒有用戶數據
+            目前沒有選手數據
           </div>
         )}
       </div>
