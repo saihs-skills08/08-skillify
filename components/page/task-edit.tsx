@@ -16,8 +16,6 @@ import {
   Trash,
   WandSparkles,
   X,
-  Upload,
-  Image as ImageIcon,
 } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Switch } from "@/components/ui/switch";
@@ -395,9 +393,11 @@ export default function TaskEdit({
                               variant="destructive"
                               size="sm"
                               className="mt-2"
-                              onClick={() =>
-                                handleImageRemove(result.$id, result.imageUrl!)
-                              }
+                              onClick={() => {
+                                if (result.imageUrl) {
+                                  handleImageRemove(result.$id, result.imageUrl);
+                                }
+                              }}
                             >
                               <Trash className="h-4 w-4 mr-1" />
                               移除圖片

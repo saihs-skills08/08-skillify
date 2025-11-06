@@ -12,6 +12,9 @@ import { ID } from "appwrite";
  * - NEXT_PUBLIC_APPWRITE_PROJECT: The Appwrite project ID
  * 
  * Note: The storage bucket must be created in Appwrite with appropriate read/write permissions
+ * 
+ * These server actions are available for future use if server-side upload logic is needed.
+ * Currently, the component uses the storage client directly for real-time uploads.
  */
 
 export async function uploadImage(file: File): Promise<string> {
