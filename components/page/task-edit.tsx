@@ -7,7 +7,7 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import ReactMarkdown from "react-markdown";
 import { Button } from "@/components/ui/button";
-import { ID, Storage } from "appwrite";
+import { ID } from "appwrite";
 import { Card } from "@/components/ui/card";
 import {
   BrushCleaning,
@@ -48,7 +48,12 @@ import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { submitNewTask } from "@/app/tasks/new/actions";
 import dynamic from "next/dynamic";
-import { client } from "@/appwrite";
+import {
+  storage,
+  BUCKET_ID,
+  getStorageFileUrl,
+  getFileIdFromUrl,
+} from "@/appwrite";
 import Image from "next/image";
 
 const MonacoEditor = dynamic(() => import("@monaco-editor/react"), {
@@ -83,17 +88,10 @@ export default function TaskEdit({
   ): Promise<void> => {
     try {
       setUploadingImage(resultId);
-      const storageClient = new Storage(client);
-      const BUCKET_ID =
-        process.env.NEXT_PUBLIC_APPWRITE_BUCKET_ID || "task-results";
 
-      const response = await storageClient.createFile(
-        BUCKET_ID,
-        ID.unique(),
-        file,
-      );
+      const response = await storage.createFile(BUCKET_ID, ID.unique(), file);
 
-      const fileUrl = `${process.env.NEXT_PUBLIC_APPWRITE_ENDPOINT}/storage/buckets/${BUCKET_ID}/files/${response.$id}/view?project=${process.env.NEXT_PUBLIC_APPWRITE_PROJECT}`;
+      const fileUrl = getStorageFileUrl(response.$id);
 
       setTaskResults((prev) =>
         prev.map((r) =>
@@ -107,6 +105,29 @@ export default function TaskEdit({
       toast.error("圖片上傳失敗，請稍後再試！");
     } finally {
       setUploadingImage(null);
+    }
+  };
+
+  const handleImageRemove = async (
+    resultId: string,
+    imageUrl: string,
+  ): Promise<void> => {
+    try {
+      const fileId = getFileIdFromUrl(imageUrl);
+      if (fileId) {
+        await storage.deleteFile(BUCKET_ID, fileId);
+      }
+
+      setTaskResults((prev) =>
+        prev.map((r) =>
+          r.$id === resultId ? { ...r, imageUrl: undefined } : r,
+        ),
+      );
+
+      toast.success("圖片已移除");
+    } catch (error) {
+      console.error("Error deleting image:", error);
+      toast.error("圖片移除失敗，請稍後再試！");
     }
   };
 
@@ -374,16 +395,9 @@ export default function TaskEdit({
                               variant="destructive"
                               size="sm"
                               className="mt-2"
-                              onClick={() => {
-                                setTaskResults((prev) =>
-                                  prev.map((r) =>
-                                    r.$id === result.$id
-                                      ? { ...r, imageUrl: undefined }
-                                      : r,
-                                  ),
-                                );
-                                toast.success("圖片已移除");
-                              }}
+                              onClick={() =>
+                                handleImageRemove(result.$id, result.imageUrl!)
+                              }
                             >
                               <Trash className="h-4 w-4 mr-1" />
                               移除圖片

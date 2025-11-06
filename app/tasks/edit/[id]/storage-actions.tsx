@@ -1,6 +1,6 @@
 "use server";
 
-import { storage } from "@/appwrite";
+import { storage, BUCKET_ID, getStorageFileUrl } from "@/appwrite";
 import { ID } from "appwrite";
 
 /**
@@ -14,20 +14,11 @@ import { ID } from "appwrite";
  * Note: The storage bucket must be created in Appwrite with appropriate read/write permissions
  */
 
-const BUCKET_ID = process.env.NEXT_PUBLIC_APPWRITE_BUCKET_ID || "task-results";
-
 export async function uploadImage(file: File): Promise<string> {
   try {
-    const response = await storage.createFile(
-      BUCKET_ID,
-      ID.unique(),
-      file
-    );
-    
-    // Get file URL
-    const fileUrl = `${process.env.NEXT_PUBLIC_APPWRITE_ENDPOINT}/storage/buckets/${BUCKET_ID}/files/${response.$id}/view?project=${process.env.NEXT_PUBLIC_APPWRITE_PROJECT}`;
-    
-    return fileUrl;
+    const response = await storage.createFile(BUCKET_ID, ID.unique(), file);
+
+    return getStorageFileUrl(response.$id);
   } catch (error) {
     console.error("Error uploading image:", error);
     throw error;
