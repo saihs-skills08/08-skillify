@@ -14,7 +14,7 @@ export default function CodeBlock({
 }) {
   return (
     <SyntaxHighlighter
-      language={language}
+      language={language == "android" ? "kotlin" : language}
       style={oneDark}
       showLineNumbers={showLineNumbers}
       customStyle={{
